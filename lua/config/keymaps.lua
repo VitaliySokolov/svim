@@ -46,7 +46,7 @@ keymap("n", "<S-Right>", "<cmd>vertical resize +2<CR>")
 
 -- from NvChad
 -- go to  beginning and end
-keymap("i", "<C-a>","<ESC>^i") --, "Beginning of line")
+keymap("i", "<C-a>", "<ESC>^i") --, "Beginning of line")
 keymap("i", "<C-e>", "<End>") --, "End of line")
 
 -- navigate within insert mode
@@ -81,7 +81,7 @@ keymap("n", "<leader>rn", "<cmd> set rnu! <CR>") --"Toggle relative number" },
 -- keymap("n", "Up", "v:count || mode(1)[0:1] == \"no\" ? \"k\" : \"gk\"") --"Move up", opts = { expr = true } },
 -- keymap("n", "Down", "v:count || mode(1)[0:1] == \"no\" ? \"j\" : \"gj\"") --"Move down", opts = { expr = true } },
 
-    -- new buffer
+-- new buffer
 keymap("n", "<leader>b", "<cmd> enew <CR>") --"New buffer" },
 --nkeymap("n", "<leader>ch", "<cmd> NvCheatsheet <CR>") --"Mapping cheatsheet" },
 
@@ -91,4 +91,3 @@ keymap("n", "<leader>b", "<cmd> enew <CR>") --"New buffer" },
 --       end,
 --       "LSP formatting",
 --     },
-
