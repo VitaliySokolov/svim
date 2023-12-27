@@ -1,3 +1,4 @@
+-- https://github.com/josean-dev/dev-environment-files/blob/main/.config/nvim/lua/josean/plugins/formatting.lua
 return {
   "stevearc/conform.nvim",
   lazy = true,

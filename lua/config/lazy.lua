@@ -1,5 +1,6 @@
 --- Install lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local updateFrequency = 7 * 24 * 3600
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
     "git",
@@ -19,8 +20,11 @@ require("lazy").setup({
 }, {
   defaults = { lazy = true, version = nil },
   install = { missing = true, colorscheme = { "gruvbox" } },
-  checker = { enabled = true },
+  checker = { enabled = true, frequency = updateFrequency },
   performance = {
+    cache = {
+      enabled = true,
+    },
     rtp = {
       disabled_plugins = {
         "gzip",
