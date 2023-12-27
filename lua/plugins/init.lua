@@ -17,4 +17,18 @@ return {
     enabled = true,
     config = { default = true }, -- same as config = true
   },
+  {
+    "numToStr/Comment.nvim",
+    opts = {
+      -- add any options here
+    },
+    lazy = false,
+  },
+  -- { "tpope/vim-surround", event = "BufReadPre", enabled = false },
+  {
+    "kylechui/nvim-surround",
+    event = "BufReadPre",
+    opts = {},
+    enabled = false,
+  },
 }
