@@ -39,6 +39,7 @@ vim.opt.termguicolors = true
 vim.opt.timeoutlen = 300 -- <Leader> + <key> timeout in ms
 vim.opt.undofile = true
 vim.opt.updatetime = 200
+vim.opt.whichwrap:append("h,l")
 vim.opt.wildmode = "longest:full,full"
 
 vim.g.mapleader = " "
