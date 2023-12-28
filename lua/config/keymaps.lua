@@ -82,7 +82,7 @@ keymap("n", "<leader>rn", "<cmd> set rnu! <CR>") --"Toggle relative number" },
 -- keymap("n", "Down", "v:count || mode(1)[0:1] == \"no\" ? \"j\" : \"gj\"") --"Move down", opts = { expr = true } },
 
 -- new buffer
-keymap("n", "<leader>b", "<cmd> enew <CR>") --"New buffer" },
+-- keymap("n", "<leader>b", "<cmd>ls<CR>:b<Space>") --"New buffer" },
 --nkeymap("n", "<leader>ch", "<cmd> NvCheatsheet <CR>") --"Mapping cheatsheet" },
 
 -- keymap("n", "<leader>fm"] = {
@@ -96,3 +96,4 @@ keymap("n", "<C-x><C-s>", "<cmd> w <CR>")
 keymap("i", "<C-x><C-s>", "<cmd> w <CR>")
 keymap("n", "<C-x><C-c>", "<cmd> q <CR>")
 keymap("n", "<C-x>b", "<cmd>Telescope buffers<cr>")
+keymap("n", "<leader>b", "<cmd>Telescope buffers<cr>")

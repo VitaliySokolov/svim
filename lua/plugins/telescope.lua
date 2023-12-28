@@ -9,5 +9,14 @@ return {
     { "<leader>fg", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
     { "<leader>f/", "<cmd>Telescope live_grep<cr>", desc = "Grep" },
   },
-  config = true,
+  config = function()
+    require("telescope").setup({
+      pickers = {
+        buffers = {
+          ignore_current_buffer = true,
+          sort_lastused = true,
+        },
+      },
+    })
+  end,
 }
