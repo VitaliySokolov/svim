@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 # set -x
 SVIM=~/.config/svim
 export SVIM
