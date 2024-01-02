@@ -5,10 +5,10 @@ keymap("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
 keymap("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
 
 -- Better viewing
--- keymap("n", "n", "nzzzv")
--- keymap("n", "N", "Nzzzv")
--- keymap("n", "g,", "g,zvzz")
--- keymap("n", "g;", "g;zvzz")
+keymap("n", "n", "nzzzv")
+keymap("n", "N", "Nzzzv")
+keymap("n", "g,", "g,zvzz")
+keymap("n", "g;", "g;zvzz")
 
 -- Better escape using jk in insert and terminal mode
 keymap("i", "jk", "<ESC>")
