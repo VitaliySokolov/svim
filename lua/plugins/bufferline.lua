@@ -8,7 +8,7 @@ return {
         mode = "tabs", -- tabs or buffers
         numbers = "buffer_id",
         diagnostics = "nvim_lsp",
-        -- always_show_bufferline = false,
+        always_show_bufferline = false,
         separator_style = "slant" or "padded_slant",
         show_tab_indicators = true,
         -- show_buffer_close_icons = false,

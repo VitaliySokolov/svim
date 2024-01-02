@@ -14,7 +14,7 @@ return {
       --      q = { "<cmd>lua require('util').smart_quit()<CR>", "Quit" },
       f = { name = "+File" },
       g = { name = "+Git" },
-      h = { name = "Hunk" },
+      h = { name = "+Hunk" },
       c = {
         name = "+Code",
         x = {

@@ -97,3 +97,38 @@ keymap("i", "<C-x><C-s>", "<cmd> w <CR>")
 keymap("n", "<C-x><C-c>", "<cmd> q <CR>")
 keymap("n", "<C-x>b", "<cmd>Telescope buffers<cr>")
 keymap("n", "<leader>b", "<cmd>Telescope buffers<cr>")
+
+-- debugging
+keymap(
+  "n",
+  "<F8>",
+  [[:lua require"dap".toggle_breakpoint()<CR>]],
+  { noremap = true }
+)
+keymap("n", "<F9>", [[:lua require"dap".continue()<CR>]], { noremap = true })
+keymap("n", "<F10>", [[:lua require"dap".step_over()<CR>]], { noremap = true })
+keymap(
+  "n",
+  "<S-F10>",
+  [[:lua require"dap".step_into()<CR>]],
+  { noremap = true }
+)
+keymap(
+  "n",
+  "<F12>",
+  [[:lua require"dap.ui.widgets".hover()<CR>]],
+  { noremap = true }
+)
+keymap(
+  "n",
+  "<F5>",
+  [[:lua require"osv".launch({port = 8086})<CR>]],
+  { noremap = true }
+)
+
+-- :call nvim_create_user_command()
+vim.api.nvim_create_user_command(
+  "OsvStop",
+  [[:lua require"osv".stop()<CR>]],
+  { desc = "Stop Lua debugger" }
+)
