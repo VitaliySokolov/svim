@@ -31,4 +31,10 @@ return {
     opts = {},
     enabled = false,
   },
+
+  -- game
+  {
+    "ThePrimeagen/vim-be-good",
+    cmd = "VimBeGood",
+  },
 }

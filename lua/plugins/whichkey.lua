@@ -3,35 +3,16 @@ return {
   event = "VeryLazy",
   config = function()
     local wk = require("which-key")
-    wk.setup({
-      show_help = false,
-      plugins = { spelling = true },
-      key_labels = { ["<leader>"] = "SPC" },
-      triggers = "auto",
+    wk.add({
+      { "<leader>c", group = "+Code" },
+      { "<leader>cX", group = "Swap Previous" },
+      { "<leader>cx", group = "Swap Next" },
+      { "<leader>g", group = "+Git" },
+      { "<leader>f", group = "+File" },
+      { "<leader>h", group = "+Hunk" },
+      { "<leader>o", group = "+Org" },
+      { "<leader>r", group = "+Re(name,start)" },
+      { "<leader>t", group = "+Toggle" },
     })
-    wk.register({
-      --      w = { "<cmd>update!<CR>", "Save" },
-      --      q = { "<cmd>lua require('util').smart_quit()<CR>", "Quit" },
-      f = { name = "+File" },
-      g = { name = "+Git" },
-      h = { name = "+Hunk" },
-      c = {
-        name = "+Code",
-        x = {
-          name = "Swap Next",
-          f = "Function",
-          p = "Parameter",
-          c = "Class",
-        },
-        X = {
-          name = "Swap Previous",
-          f = "Function",
-          p = "Parameter",
-          c = "Class",
-        },
-      },
-      o = { name = "+Org" },
-      r = { name = "+Re(name,start)" },
-    }, { prefix = "<leader>" })
   end,
 }

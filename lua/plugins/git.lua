@@ -1,7 +1,12 @@
 return {
   {
     "sindrets/diffview.nvim",
-    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
+    cmd = {
+      "DiffviewOpen",
+      "DiffviewClose",
+      "DiffviewToggleFiles",
+      "DiffviewFocusFiles",
+    },
     config = true,
   },
   {
@@ -22,9 +27,14 @@ return {
     init = function()
       -- load gitsigns only when a git file is opened
       vim.api.nvim_create_autocmd({ "BufRead" }, {
-        group = vim.api.nvim_create_augroup("GitSignsLazyLoad", { clear = true }),
+        group = vim.api.nvim_create_augroup(
+          "GitSignsLazyLoad",
+          { clear = true }
+        ),
         callback = function()
-          vim.fn.system("git -C " .. '"' .. vim.fn.expand("%:p:h") .. '"' .. " rev-parse")
+          vim.fn.system(
+            "git -C " .. '"' .. vim.fn.expand("%:p:h") .. '"' .. " rev-parse"
+          )
           if vim.v.shell_error == 0 then
             vim.api.nvim_del_augroup_by_name("GitSignsLazyLoad")
             vim.schedule(function()
@@ -35,7 +45,8 @@ return {
       })
     end,
     config = function()
-      local updatetime = vim.api.nvim_get_option_value("updatetime", { scope = "global" })
+      local updatetime =
+        vim.api.nvim_get_option_value("updatetime", { scope = "global" })
 
       require("gitsigns").setup({
         -- signs = { add = { text = "│" }, change = { text = "│" } },
@@ -84,13 +95,23 @@ return {
             gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
           end, { desc = "Reset hunk" })
           map("n", "<leader>hS", gs.stage_buffer, { desc = "Stage buffer" })
-          map("n", "<leader>hu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
+          map(
+            "n",
+            "<leader>hu",
+            gs.undo_stage_hunk,
+            { desc = "Undo stage hunk" }
+          )
           map("n", "<leader>hR", gs.reset_buffer, { desc = "Reset buffer" })
           map("n", "<leader>hp", gs.preview_hunk, { desc = "Preview hunk" })
           map("n", "<leader>hb", function()
             gs.blame_line({ full = true })
           end, { desc = "Blame line" })
-          map("n", "<leader>tb", gs.toggle_current_line_blame, { desc = "Toggle blame line" })
+          map(
+            "n",
+            "<leader>tb",
+            gs.toggle_current_line_blame,
+            { desc = "Toggle blame line" }
+          )
           map("n", "<leader>hd", gs.diffthis, { desc = "Diff this" })
           map("n", "<leader>hD", function()
             gs.diffthis("~")
@@ -98,7 +119,12 @@ return {
           map("n", "<leader>td", gs.toggle_deleted, { desc = "Toggle deleted" })
 
           -- Text object
-          map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Select hunk" })
+          map(
+            { "o", "x" },
+            "ih",
+            ":<C-U>Gitsigns select_hunk<CR>",
+            { desc = "Select hunk" }
+          )
 
           -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>hr", "", {
           --   callback = function() require("gitsigns").reset_hunk() end,
