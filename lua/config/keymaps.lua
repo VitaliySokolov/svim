@@ -92,11 +92,9 @@ keymap("n", "<leader>rn", "<cmd> set rnu! <CR>") --"Toggle relative number" },
 --       "LSP formatting",
 --     },
 --
-keymap("n", "<C-x><C-s>", "<cmd> w <CR>")
-keymap("i", "<C-x><C-s>", "<cmd> w <CR>")
-keymap("n", "<C-x><C-c>", "<cmd> q <CR>")
-keymap("n", "<C-x>b", "<cmd>Telescope buffers<cr>")
-keymap("n", "<leader>b", "<cmd>Telescope buffers<cr>")
+keymap("n", "<C-x><C-s>", "<cmd> w <CR>", { desc = "Save" })
+keymap("i", "<C-x><C-s>", "<cmd> w <CR>", { desc = "Save" })
+keymap("n", "<C-x><C-c>", "<cmd> q <CR>", { desc = "Quit" })
 
 -- debugging
 keymap(

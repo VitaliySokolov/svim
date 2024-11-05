@@ -8,7 +8,7 @@ return {
       { "<leader>cX", group = "Swap Previous" },
       { "<leader>cx", group = "Swap Next" },
       { "<leader>g", group = "+Git" },
-      { "<leader>f", group = "+File" },
+      { "<leader>f", group = "+Telescope" },
       { "<leader>h", group = "+Hunk" },
       { "<leader>o", group = "+Org" },
       { "<leader>r", group = "+Re(name,start)" },
