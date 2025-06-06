@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 function old() {
   SVIM=~/.config/svim
@@ -26,11 +26,13 @@ function old() {
 
 main ()
 {
+
+  local RC_FILE="$HOME/.zshrc"
+  if [ -f "$HOME/.commonrc" ] ; then
+    RC_FILE="$HOME/.commonrc"
+  fi
+
   if ! command -v vs 2>&1 >/dev/null ; then
-    local RC_FILE="$HOME/.zshrc"
-    if [ -f "$HOME/.commonrc" ] ; then
-      RC_FILE="$HOME/.commonrc"
-    fi
     echo "Adding vs alias to $RC_FILE..."
     echo "alias vs='NVIM_APPNAME=nvim-svim nvim' # svim" >> $RC_FILE
     
@@ -51,4 +53,14 @@ main ()
   fi
 }
 
-main
+# main
+test() {
+  command -v vs 
+  if ! command -v vs 2>&1 >/dev/null ; then
+    echo "no"
+  else
+    echo "yes"
+  fi
+}
+
+test
