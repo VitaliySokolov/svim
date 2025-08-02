@@ -1,4 +1,9 @@
+local OLLAMA_HOST = os.getenv("OLLAMA_HOST")
+  or os.getenv("EX_OLLAMA_HOST")
+  or "localhost:11434"
+
 return {
+
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
@@ -7,22 +12,24 @@ return {
       -- add any opts here
       -- for example
       provider = "ollama",
-      debug = true,
+      -- debug = true,
       -- behaviour = {
       --   --- ... existing behaviours
       --   enable_cursor_planning_mode = true, -- enable cursor planning mode!
       -- },
-      ollama = {
-        -- behaviour = {
-        --   --- ... existing behaviours
-        --   enable_cursor_planning_mode = true, -- enable cursor planning mode!
-        -- },
-        endpoint = "http://192.168.0.105:11434",
-        model = "gemma3:4b", -- your desired model (or use gpt-4o, etc.) timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-        -- model = "qwen3:14b", -- your desired model (or use gpt-4o, etc.) timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-        -- temperature = 0,
-        -- max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
-        --reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+      providers = {
+        ollama = {
+          -- behaviour = {
+          --   --- ... existing behaviours
+          --   enable_cursor_planning_mode = true, -- enable cursor planning mode!
+          -- },
+          endpoint = OLLAMA_HOST,
+          model = "qwen2.5-coder:1.5b", -- your desired model (or use gpt-4o, etc.) timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+          -- model = "qwen3:14b", -- your desired model (or use gpt-4o, etc.) timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+          -- temperature = 0,
+          -- max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
+          --reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+        },
       },
       -- prompt_opts = {
       --   system_prompt = "Act as a helpfull assistent.",

@@ -1,6 +1,6 @@
 --- Install lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-local updateFrequency = 7 * 24 * 3600
+local updateFrequency = 60 * 24 * 3600
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
     "git",
