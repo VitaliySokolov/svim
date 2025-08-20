@@ -5,7 +5,7 @@
 install oh-my-posh https://ohmyposh.dev/
 link config
 ```
-ln -s .my-atomic-theme.omp.json ~/.my-atomic-theme.omp.json
+ln -s "$PWD/.my-atomic-theme.omp.json" ~/.my-atomic-theme.omp.json
 ```
 
 add to .zshrc
