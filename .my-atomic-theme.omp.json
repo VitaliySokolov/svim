@@ -28,19 +28,6 @@
         },
         {
           "properties": {
-            "folder_icon": " \uf07b ",
-            "home_icon": "\ue617",
-            "style": "folder"
-          },
-          "template": " \uf07b\uea9c {{ .Path }} ",
-          "foreground": "#2d3436",
-          "powerline_symbol": "\ue0b0",
-          "background": "#FF9248",
-          "type": "path",
-          "style": "powerline"
-        },
-        {
-          "properties": {
             "branch_icon": "\ue725 ",
             "fetch_status": true,
             "fetch_upstream_icon": true
@@ -250,6 +237,28 @@
           "invert_powerline": true
         },
         {
+          "background": "#516BEB",
+          "foreground": "#ffffff",
+          "leading_diamond": "\ue0b2",
+          "trailing_diamond": "<transparent,#516BEB>\ue0b2</>",
+          "type": "command",
+          "style": "diamond",
+          "template": "\udb80\udeca {{ .Output }} ",
+          "properties": {
+            "shell": "bash",
+            "command": "df -h / | awk 'NR > 1 {print $4}'"
+          }
+        },
+        {
+          "background": "#516BEB",
+          "foreground": "#ffffff",
+          "leading_diamond": "\ue0b2",
+          "style": "diamond",
+          "template": "\ue266 {{ round .PhysicalPercentUsed 0 }}% {{ (div ((sub .PhysicalTotalMemory .PhysicalAvailableMemory)|float64) 1073741824.0) }}/{{ (div .PhysicalTotalMemory 1073741824.0) }}GB ",
+          "trailing_diamond": "<transparent,#516BEB>\ue0b2</>",
+          "type": "sysinfo"
+        },
+        {
           "properties": {
             "time_format": "_2,15:04"
           },
@@ -273,6 +282,17 @@
           "foreground": "#21c7c7",
           "type": "text",
           "style": "plain"
+        },
+        {
+          "properties": {
+            "folder_icon": " \uf07b ",
+            "home_icon": "\ue617",
+            "style": "folder"
+          },
+          "template": " \uea9c <b>{{ .Path }}</b> ",
+          "foreground": "cyan",
+          "type": "path",
+          "style": "powerline"
         },
         {
           "properties": {
