@@ -62,6 +62,7 @@
     {
       "type": "prompt",
       "alignment": "right",
+      "overflow": "hide",
       "segments": [
         {
           "properties": {
@@ -244,6 +245,10 @@
           "type": "command",
           "style": "diamond",
           "template": "\udb80\udeca {{ .Output }} ",
+          "cache": {
+            "duration": "15m",
+            "strategy": "session"
+          },
           "properties": {
             "shell": "bash",
             "command": "df -h / | awk 'NR > 1 {print $4}'"
