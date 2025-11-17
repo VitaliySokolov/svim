@@ -1,0 +1,125 @@
+{
+    "todo-tree.tree.showScanModeButton": false,
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.codeLens": false,
+    "editor.snippetSuggestions": "top",
+    "editor.tabSize": 2,
+    "editor.renderWhitespace": "all",
+    "editor.renderControlCharacters": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    "eslint.run": "onSave",
+    "git.enableCommitSigning": true,
+    "update.mode": "manual",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "[python]": {
+        "editor.tabSize": 4,
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "prettier.singleQuote": true,
+    "prettier.arrowParens": "avoid",
+    "prettier.trailingComma": "es5",
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.columnSelection": false,
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]"
+    ],
+    "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "java.saveActions.organizeImports": true,
+    "window.zoomLevel": 1,
+    "redhat.telemetry.enabled": false,
+    "files.autoSave": "onFocusChange",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.minimap.enabled": false,
+    "vim.insertModeKeyBindings": [
+        {
+          "before": ["j", "k"],
+          "after": ["<Esc>"]
+        }
+    ],
+    "extensions.experimental.affinity": {
+      "vscodevim.vim": 1
+    },
+    "vim.leader": "<space>",
+    "vim.useSystemClipboard": true,
+    "vim.whichwrap": "b,s,h,l",
+    "vim.enableNeovim": true,
+    "vim.easymotion": false,
+    "editor.stickyScroll.enabled": false,
+    "vim.normalModeKeyBindings": [
+        {
+            "before": ["<leader>", "b"],
+            "commands": ["workbench.action.quickOpen"]
+        },
+        {
+            "before": ["<leader>", "f"],
+            "commands": ["workbench.action.findInFiles"]
+        },
+        {
+            "before": ["<leader>", "g"],
+            "commands": ["workbench.view.scm"]
+        },
+        {
+            "before": ["<leader>", "e"],
+            "commands": ["workbench.view.explorer"]
+        },
+        {
+            "before": ["<leader>", "<tab>"],
+            "commands": ["workbench.action.toggleSidebarVisibility"]
+        },
+        {
+            "before": ["<leader>", "t", "t"],
+            "commands": ["testing.runAtCursor"]
+        },
+        {
+            "before": ["<leader>", "p", "o"],
+            "commands": ["projectManager.listProjects"]
+        }
+    ],
+    "vim.visualModeKeyBindings": [
+        {
+            "before": ["<leader>", "f"],
+            "commands": ["workbench.action.findInFiles"]
+        },
+        {
+            "before": ["<leader>", "<leader>"],
+            "commands": ["workbench.action.quickOpen"]
+        }
+    ],
+    "editor.lineNumbers": "relative",
+    "application.shellEnvironmentResolutionTimeout": 30,
+    "editor.fontLigatures": false,
+    "terminal.integrated.fontFamily": "FiraCode Nerd Font Mono",
+    "jest.runMode": "on-demand"
+}
+
