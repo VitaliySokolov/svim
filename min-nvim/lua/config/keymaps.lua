@@ -57,10 +57,10 @@ keymap("i", "<C-k>", "<Up>") --, "Move up")
 
 -- keymap("n", "<Esc>", "<cmd> noh <CR>") --"Clear highlights" }, ???
 -- switch between windows
-keymap("n", "<C-h>", "<C-w>h") --"Window left" },
-keymap("n", "<C-l>", "<C-w>l") --"Window right" },
-keymap("n", "<C-j>", "<C-w>j") --"Window down" },
-keymap("n", "<C-k>", "<C-w>k") --"Window up" },
+-- keymap("n", "<C-h>", "<C-w>h") --"Window left" },
+-- keymap("n", "<C-l>", "<C-w>l") --"Window right" },
+-- keymap("n", "<C-j>", "<C-w>j") --"Window down" },
+-- keymap("n", "<C-k>", "<C-w>k") --"Window up" },
 
 -- save
 keymap("n", "<C-s>", "<cmd> w <CR>") --"Save file" },
@@ -145,3 +145,29 @@ keymap('n', '<leader>/', "<cmd>Telescope current_buffer_fuzzy_find <CR>", { desc
 keymap('n', '<leader>fm', "<cmd>Telescope marks <CR>", { desc = 'Telescope marks' })
 keymap('n', '<leader>fj', "<cmd>Telescope jumplist <CR>", { desc = 'Telescope jumplist' })
 keymap('n', '<leader>fk', "<cmd>Telescope keymaps <CR>", { desc = 'Telescope keymaps' })
+
+keymap('n', '<leader>fP',
+  function()
+    require("telescope.builtin").find_files({
+      cwd = require("lazy.core.config").options.root -- Uses the root dir configured in lazy.nvim options
+    })
+  end,
+  { desc = 'Find Plugin File' })
+
+keymap('n', '<leader>fC',
+  function()
+    require("telescope.builtin").find_files({
+      cwd = vim.fn.stdpath('config')
+    })
+  end,
+  { desc = 'Find Config File' })
+
+-- diagnostics
+keymap('n', '<leader>d', vim.diagnostic.open_float)
+
+-- test
+keymap('n', '<leader>t', "<cmd>TestNearest<CR>")
+-- keymap('n', '<leader>T', "<cmd>TestFile<CR>")
+-- keymap('n', '<leader>a', "<cmd>TestSuite<CR>")
+-- keymap('n', '<leader>l', "<cmd>TestLast<CR>")
+-- keymap('n', '<leader>g', "<cmd>TestVisit<CR>")
