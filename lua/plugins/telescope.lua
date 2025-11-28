@@ -2,8 +2,8 @@ return {
   "nvim-telescope/telescope.nvim",
   cmd = "Telescope",
   keys = {
-    { "<leader><space>", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-    { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
+    { "<leader><space>", "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git' }})<cr>", desc = "Find Files" },
+    { "<leader>ff", "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git' }})<cr>", desc = "Find Files" },
     { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
     { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
     { "<leader>b", "<cmd>Telescope buffers<cr>", desc = "Buffers" },

@@ -132,8 +132,16 @@ vim.api.nvim_create_user_command(
 )
 
 -- telescope
-keymap('n', '<leader>ff', "<cmd>Telescope find_files <CR>", { desc = 'Telescope find files' })
-keymap('n', '<leader><leader>', "<cmd>Telescope find_files <CR>", { desc = 'Telescope find files' })
+keymap(
+  'n',
+  '<leader>ff',
+  "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git' }})<CR>",
+  { desc = 'Telescope find files' })
+keymap(
+  'n',
+  '<leader><leader>',
+  "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git' }})<CR>",
+  { desc = 'Telescope find files' })
 keymap('n', '<leader>gs', "<cmd>Telescope git_status <CR>", { desc = 'Telescope git status' })
 keymap('n', '<leader>gf', "<cmd>Telescope git_files <CR>", { desc = 'Telescope git files' })
 keymap('n', '<leader>gb', "<cmd>Telescope git_branches <CR>", { desc = 'Telescope git branches' })
