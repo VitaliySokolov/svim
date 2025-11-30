@@ -1,0 +1,29 @@
+[user]
+	name = Vitaliy Sokolov
+	email = sokolovvitalik@gmail.com
+[core]
+	autocrlf = false
+	safecrlf = false
+	editor = vim
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	hist = log --pretty=format:\"%h %ad | %s%d [%an] %G?\" --graph --date=short
+	type = cat-file -t
+	dump = cat-file -p
+	last = log --stat -p -1
+	z = stash
+	push-new = push -u origin HEAD
+	logs = log --show-signature
+
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
