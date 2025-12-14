@@ -47,6 +47,14 @@
     "command": "workbench.action.focusRightGroup",
     "when": "editorFocus"
   },
+  {
+    "key": "cmd+x",
+    "command": "workbench.action.showCommands"
+  },
+  {
+    "key": "alt+x",
+    "command": "-workbench.action.showCommands"
+  },
   // {
   //   "key": "escape",
   //   "command": "workbench.action.toggleSidebarVisibility",
