@@ -23,11 +23,6 @@
     "when": "terminal.active"
   },
   {
-    "key": "ctrl+`",
-    "command": "-workbench.action.terminal.toggleTerminal",
-    "when": "terminal.active"
-  },
-  {
     "key": "ctrl+h",
     "command": "workbench.action.focusLeftGroup",
     "when": "editorFocus"
@@ -81,5 +76,47 @@
     "key": "tab",
     "command": "-acceptSelectedSuggestion",
     "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus"
-  }
+  },
+  // PREVENT TAB FROM JUMPING OUT:
+  // Captures Tab in the Debug Console and does nothing if the widget is hidden.
+  {
+    "key": "tab",
+    "command": "noop",
+    "when": "inDebugRepl && !suggestWidgetVisible"
+  },
+  {
+    "key": "shift+tab",
+    "command": "noop",
+    "when": "inDebugRepl && !suggestWidgetVisible"
+  },
+  // DEBUG CONSOLE: If only one suggestion exists, Tab accepts it
+  {
+    "key": "tab",
+    "command": "acceptSelectedSuggestion",
+    "when": "inDebugRepl && suggestWidgetVisible && !suggestWidgetMultipleSuggestions"
+  },
+  // DEBUG CONSOLE: If multiple suggestions exist, Tab cycles next
+  {
+    "key": "tab",
+    "command": "selectNextSuggestion",
+    "when": "inDebugRepl && suggestWidgetVisible && suggestWidgetMultipleSuggestions"
+  },
+  // DEBUG CONSOLE: Shift+Tab cycles previous
+  {
+    "key": "shift+tab",
+    "command": "selectPrevSuggestion",
+    "when": "inDebugRepl && suggestWidgetVisible && suggestWidgetMultipleSuggestions"
+  },
+  // Unbind the default Tab behavior in the Debug Console to prevent conflicts
+  {
+    "key": "tab",
+    "command": "-acceptSelectedSuggestion",
+    "when": "inDebugRepl && suggestWidgetVisible"
+  },
+  // Debug Console: Enter to accept suggestion
+  {
+    "key": "enter",
+    "command": "acceptSelectedSuggestion",
+    "when": "inDebugRepl && suggestWidgetVisible"
+  },
 ]
