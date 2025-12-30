@@ -148,6 +148,7 @@ keymap('n', '<leader>gb', "<cmd>Telescope git_branches <CR>", { desc = 'Telescop
 keymap('n', '<leader>gc', "<cmd>Telescope git_commits <CR>", { desc = 'Telescope git commits' })
 keymap('n', '<leader>gz', "<cmd>Telescope git_stash <CR>", { desc = 'Telescope git stash' })
 keymap('n', '<leader>b', "<cmd>Telescope buffers <CR>", { desc = 'Telescope buffers' })
+keymap('n', '<C-x>b', "<cmd>Telescope buffers <CR>", { desc = 'Switch to buffers' })
 keymap('n', '<leader>f/', "<cmd>Telescope live_grep <CR>", { desc = 'Telescope live grep' })
 keymap('n', '<leader>/', "<cmd>Telescope current_buffer_fuzzy_find <CR>", { desc = 'Telescope byffer fzf' })
 keymap('n', '<leader>fm', "<cmd>Telescope marks <CR>", { desc = 'Telescope marks' })
