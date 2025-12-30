@@ -60,4 +60,26 @@
   //   "command": "workbench.action.toggleSidebarVisibility",
   //   "when": "sideBarFocus"
   // },
+  // 1. If the widget is visible but DOES NOT have multiple suggestions, Tab accepts.
+  {
+    "key": "tab",
+    "command": "acceptSelectedSuggestion",
+    "when": "suggestWidgetVisible && !suggestWidgetMultipleSuggestions && textInputFocus"
+  },
+  // 2. If the widget is visible and DOES have multiple suggestions, Tab cycles.
+  {
+    "key": "tab",
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetVisible && suggestWidgetMultipleSuggestions && textInputFocus"
+  },
+  {
+    "key": "shift+tab",
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "key": "tab",
+    "command": "-acceptSelectedSuggestion",
+    "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus"
+  }
 ]
