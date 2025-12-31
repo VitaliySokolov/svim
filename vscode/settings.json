@@ -1,4 +1,5 @@
 {
+    "keyboard.dispatch": "keyCode",
     "todo-tree.tree.showScanModeButton": false,
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
