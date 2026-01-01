@@ -56,27 +56,27 @@
   //   "when": "sideBarFocus"
   // },
   // 1. If the widget is visible but DOES NOT have multiple suggestions, Tab accepts.
-  {
-    "key": "tab",
-    "command": "acceptSelectedSuggestion",
-    "when": "suggestWidgetVisible && !suggestWidgetMultipleSuggestions && textInputFocus"
-  },
-  // 2. If the widget is visible and DOES have multiple suggestions, Tab cycles.
-  {
-    "key": "tab",
-    "command": "selectNextSuggestion",
-    "when": "suggestWidgetVisible && suggestWidgetMultipleSuggestions && textInputFocus"
-  },
+  // {
+  //   "key": "tab",
+  //   "command": "acceptSelectedSuggestion",
+  //   "when": "suggestWidgetVisible && !suggestWidgetMultipleSuggestions && textInputFocus"
+  // },
+  // // 2. If the widget is visible and DOES have multiple suggestions, Tab cycles.
+  // {
+  //   "key": "tab",
+  //   "command": "selectNextSuggestion",
+  //   "when": "suggestWidgetVisible && suggestWidgetMultipleSuggestions && textInputFocus"
+  // },
   {
     "key": "shift+tab",
-    "command": "selectPrevSuggestion",
-    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    "command": "hideSuggestWidget",
+    "when": "suggestWidgetVisible"
   },
-  {
-    "key": "tab",
-    "command": "-acceptSelectedSuggestion",
-    "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus"
-  },
+  // {
+  //   "key": "tab",
+  //   "command": "-acceptSelectedSuggestion",
+  //   "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus"
+  // },
   // PREVENT TAB FROM JUMPING OUT:
   // Captures Tab in the Debug Console and does nothing if the widget is hidden.
   {
@@ -89,30 +89,29 @@
     "command": "noop",
     "when": "inDebugRepl && !suggestWidgetVisible"
   },
-  // DEBUG CONSOLE: If only one suggestion exists, Tab accepts it
-  {
-    "key": "tab",
-    "command": "acceptSelectedSuggestion",
-    "when": "inDebugRepl && suggestWidgetVisible && !suggestWidgetMultipleSuggestions"
-  },
+  // // DEBUG CONSOLE: If only one suggestion exists, Tab accepts it
+  // {
+  //   "key": "tab",
+  //   "command": "acceptSelectedSuggestion",
+  //   "when": "inDebugRepl && suggestWidgetVisible && !suggestWidgetMultipleSuggestions"
+  // },
   // DEBUG CONSOLE: If multiple suggestions exist, Tab cycles next
-  {
-    "key": "tab",
-    "command": "selectNextSuggestion",
-    "when": "inDebugRepl && suggestWidgetVisible && suggestWidgetMultipleSuggestions"
-  },
-  // DEBUG CONSOLE: Shift+Tab cycles previous
+  // {
+  //   "key": "tab",
+  //   "command": "selectNextSuggestion",
+  //   "when": "inDebugRepl && suggestWidgetVisible && suggestWidgetMultipleSuggestions"
+  // },
   {
     "key": "shift+tab",
-    "command": "selectPrevSuggestion",
-    "when": "inDebugRepl && suggestWidgetVisible && suggestWidgetMultipleSuggestions"
-  },
-  // Unbind the default Tab behavior in the Debug Console to prevent conflicts
-  {
-    "key": "tab",
-    "command": "-acceptSelectedSuggestion",
+    "command": "hideSuggestWidget",
     "when": "inDebugRepl && suggestWidgetVisible"
   },
+  // Unbind the default Tab behavior in the Debug Console to prevent conflicts
+  // {
+  //   "key": "tab",
+  //   "command": "-acceptSelectedSuggestion",
+  //   "when": "inDebugRepl && suggestWidgetVisible"
+  // },
   // Debug Console: Enter to accept suggestion
   {
     "key": "enter",
