@@ -120,9 +120,9 @@ get_fzf_results() {
 fzf_border_label_default=' My Sessions '
 BORDER_LABEL=${T_FZF_BORDER_LABEL:-$fzf_border_label_default}
 
-HEADER=" ^s sessions ^p projects ^f find"
+HEADER=" ^s sessions ^x projects ^f find"
 SESSION_BIND="ctrl-s:change-prompt(sessions> )+reload(tmux list-sessions -F '#S')"
-PROJECTS_BIND="ctrl-p:change-prompt(projects> )+reload(find \"$PROJECTS_DIR\" -mindepth 1 -maxdepth 3 -type d -name \".git\" | sed -e \"s|/.git||\" | sed -e \"$HOME_REPLACER\")"
+PROJECTS_BIND="ctrl-x:change-prompt(projects> )+reload(find $PROJECTS_DIR -mindepth 1 -maxdepth 3 -type d -name \".git\" | sed -e \"s|/.git||\" | sed -e \"$HOME_REPLACER\")"
 TAB_BIND="tab:down,btab:up"
 
 if [ $# -eq 1 ]; then # argument provided
