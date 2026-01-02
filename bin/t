@@ -93,7 +93,8 @@ get_sessions_by_mru() {
 
 get_projects_results() {
   if [[ -n "$PROJECTS_DIR" ]]; then
-    find "$PROJECTS_DIR" -mindepth 1 -maxdepth 3 -name '.git' -type d -exec dirname {} \; | sed -e "$HOME_REPLACER"
+    # PROJECTS_DIR can be list of directories like "$HOME/dir1 $HOME/dir2"
+    find $PROJECTS_DIR -mindepth 1 -maxdepth 3 -name '.git' -type d -exec dirname {} \; | sed -e "$HOME_REPLACER"
   fi
 }
 
