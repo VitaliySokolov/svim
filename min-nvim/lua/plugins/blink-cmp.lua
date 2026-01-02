@@ -12,7 +12,7 @@ return {
   -- Optional: provides icons for the completion menu
   dependencies = {
     'rafamadriz/friendly-snippets',
-    -- 'fang2hou/blink-copilot',
+    'fang2hou/blink-copilot',
   },
   event = "VeryLazy", -- Load the plugin when Neovim starts
   -- Use a release tag to ensure stability
@@ -64,9 +64,15 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it entirely.
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer' },
+      default = { 'copilot', 'lsp', 'path', 'snippets', 'buffer' },
 
       providers = {
+          copilot = {
+            name = "copilot",
+            module = "blink-copilot",
+            score_offset = 100,
+            async = true,
+          },
           snippets = {
             opts = {
               friendly_snippets = true, -- default
