@@ -31,3 +31,15 @@ vim.lsp.config["rust-analyzer"] = {
   filetypes = { "rust" },
 }
 vim.lsp.enable("rust-analyzer")
+
+vim.lsp.config["tsserver"] = {
+  cmd = { "typescript-language-server", "--stdio" },
+  filetypes = {
+    "javascript",
+    "javascriptreact", -- Handles .jsx and .js with React syntax
+    "typescript",
+    "typescriptreact", -- Handles .tsx and .ts with React syntax
+  },
+  root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
+}
+vim.lsp.enable("tsserver")
