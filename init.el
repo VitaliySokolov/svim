@@ -121,14 +121,21 @@
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
-;; (use-package undo-tree
-;;   :config
-;;   (global-undo-tree-mode)
-;;   (setq undo-tree-visualizer-diff t)
-;;   (setq undo-tree-visualizer-timestamps t)
-;;   (setq undo-tree-auto-save-history nil)
-;;   (evil-set-undo-system 'undo-tree)
-;;   )
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode)
+  (setq undo-tree-visualizer-diff t)
+  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-auto-save-history nil)
+  (evil-set-undo-system 'undo-tree)
+  )
+
+(setq select-enable-clipboard t) ;; Sync kill-ring and system clipboard
+(setq select-active-regions t)
+(use-package xclip
+  :ensure t
+  :config
+  (xclip-mode 1))
 
 ;; +++ Keys +++
 ;;
@@ -144,12 +151,20 @@
 (global-set-key "\C-cc" 'org-capture)
 
 
-(setq select-enable-clipboard t) ;; Sync kill-ring and system clipboard
-(setq select-active-regions t)
-(use-package xclip
-  :ensure t
+(use-package god-mode
+  :after evil
   :config
-  (xclip-mode 1)
+  (define-key evil-normal-state-map (kbd "SPC") nil) ; Unbind space in normal
+  (define-key evil-motion-state-map (kbd "SPC") nil) ; Unbind space in motion
+  (define-key evil-normal-state-map (kbd "SPC SPC") 'god-execute-with-current-bindings)
+  (define-key evil-motion-state-map (kbd "SPC SPC") 'god-execute-with-current-bindings)
+  ;; x SPC r t -> C-x r t
+  ;; x SPC r SPC g w -> C-x r M-w
+  ;; g x -> M-x
+  ;; G x -> C-M-x
+  ;; g f . . -> M-f M-f M-f ;; repeat
+  ;; u c o -> C-u C-c C-o
+  ;; 1 2 f -> M-12 C-f
   )
 
 ;; --- Customizations ---
