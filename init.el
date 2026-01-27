@@ -10,10 +10,18 @@
 
 ;; No sound bell
 (setq visible-bell t)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(tooltip-mode -1)
+
+;; window only
+(when (display-graphic-p)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (tooltip-mode -1))
+
+;; terminal only
+(unless (display-graphic-p)
+  ;; mouse support in terminal
+  (xterm-mouse-mode 1))
 
 (column-number-mode)
 (global-display-line-numbers-mode t)
@@ -70,6 +78,7 @@
   :diminish which-key-mode
   :config
   (which-key-mode)
+  (which-key-enable-god-mode-support)
   (setq which-key-idle-delay 1))
 
 ;; +++ Evil +++
