@@ -162,11 +162,6 @@
 
 (use-package god-mode
   :after evil
-  :config
-  (define-key evil-normal-state-map (kbd "SPC") nil) ; Unbind space in normal
-  (define-key evil-motion-state-map (kbd "SPC") nil) ; Unbind space in motion
-  (define-key evil-normal-state-map (kbd "SPC SPC") 'god-execute-with-current-bindings)
-  (define-key evil-motion-state-map (kbd "SPC SPC") 'god-execute-with-current-bindings)
   ;; x SPC r t -> C-x r t
   ;; x SPC r SPC g w -> C-x r M-w
   ;; g x -> M-x
@@ -175,6 +170,28 @@
   ;; u c o -> C-u C-c C-o
   ;; 1 2 f -> M-12 C-f
   )
+(use-package general
+    :after evil god-mode
+    :config
+    (general-evil-setup)
+    (general-create-definer my-leader-def
+	:prefix "SPC")
+    ;; (general-nmap "SPC" (general-key "C-c"))
+    ;; (general-nmap "C-c SPC" (general-key "C-x")) ; => SPC-SPC
+    ;; (general-nmap "SPC SPC" 'god-execute-with-current-bindings) ; => SPC-SPC
+    (my-leader-def
+     :keymaps 'normal
+     "a" 'org-agenda
+     "c" 'org-capture
+     "SPC" 'god-execute-with-current-bindings
+     )
+    (evil-ex-define-cmd "gx" 'counsel-M-x)
+    (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
+    (evil-ex-define-cmd "bm" 'buffer-menu)
+    (evil-ex-define-cmd "bs" 'ivy-switch-buffer)
+    ;; always
+    ;; (define-key key-translation-map (kbd "SPC") 'event-apply-control-modifier)
+    )
 
 ;; --- Customizations ---
 ;;
