@@ -3,6 +3,22 @@
 
 (setq inhibit-startup-message t)
 
+(defun set-exec-path-from-zsh-PATH ()
+  "Set up Emacs' `exec-path' and PATH environment variable to match
+that used by the user's shell.
+
+This is particularly useful under Mac OS X and macOS, where GUI
+apps are not started from a shell."
+  (let ((path-from-shell
+         (replace-regexp-in-string
+          "[ \t\n]*$" "" (shell-command-to-string
+                          "$SHELL --login -c 'source ~/.zshrc && echo $PATH'"
+                          ))))
+    (setenv "PATH" path-from-shell)
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+(set-exec-path-from-zsh-PATH)
+
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; The default is 800 kilobytes.  Measured in bytes.
@@ -181,8 +197,10 @@
     ;; (general-nmap "SPC SPC" 'god-execute-with-current-bindings) ; => SPC-SPC
     (my-leader-def
      :keymaps 'normal
-     "a" 'org-agenda
-     "c" 'org-capture
+     "oa" 'org-agenda
+     "oc" 'org-capture
+     "wo" 'other-window
+     "w1" 'delete-other-windows
      "SPC" 'god-execute-with-current-bindings
      )
     (evil-ex-define-cmd "gx" 'counsel-M-x)
@@ -192,6 +210,20 @@
     ;; always
     ;; (define-key key-translation-map (kbd "SPC") 'event-apply-control-modifier)
     )
+
+;; org-mode
+(setq local-org-path (getenv "ORG_AGENDA_PATH"))
+(when (stringp local-org-path)
+  (setq org-agenda-files (list local-org-path)))
+
+(setq org-agenda-start-with-log-mode t)
+(setq org-log-done 'time)
+(setq org-log-into-drawer nil) ;; State, notes, clock in LOGBOOK
+(setq org-todo-keywords
+      '((sequence "BACKLOG(b!)" "TODO(t!)" "IN PROGRESS(i!)" "REVIEW(r!)"
+                  "|" "DONE(d!)" "CANCELED(c@/!)")
+        (sequence "PROPOSAL" "WATCHING" "READING" "|" "SEEN")
+      ))
 
 ;; --- Customizations ---
 ;;
