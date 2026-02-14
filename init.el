@@ -191,10 +191,14 @@ apps are not started from a shell."
     :config
     (general-evil-setup)
     (general-create-definer my-leader-def
-	:prefix "SPC")
+      ;; :keymaps 'override
+      :prefix "SPC"
+      ;; :global-prefix "C-c SPC"
+      )
     ;; (general-nmap "SPC" (general-key "C-c"))
     ;; (general-nmap "C-c SPC" (general-key "C-x")) ; => SPC-SPC
     ;; (general-nmap "SPC SPC" 'god-execute-with-current-bindings) ; => SPC-SPC
+
     (my-leader-def
      :keymaps 'normal
      "oa" 'org-agenda
@@ -202,6 +206,14 @@ apps are not started from a shell."
      "wo" 'other-window
      "w1" 'delete-other-windows
      "SPC" 'god-execute-with-current-bindings
+     "hf" 'counsel-describe-function
+     "hv" 'counsel-describe-variable
+     "ho" 'counsel-describe-symbol
+     "hl" 'counsel-find-library
+     "hi" 'counsel-info-lookup-symbol
+     "hu" 'counsel-unicode-char
+     "b" 'ivy-switch-buffer
+     "B" 'buffer-menu
      )
     (evil-ex-define-cmd "gx" 'counsel-M-x)
     (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
@@ -224,6 +236,36 @@ apps are not started from a shell."
                   "|" "DONE(d!)" "CANCELED(c@/!)")
         (sequence "PROPOSAL" "WATCHING" "READING" "|" "SEEN")
       ))
+
+(use-package diminish)
+
+(use-package command-log-mode
+  :diminish
+  :config
+  (global-command-log-mode))
+
+(use-package ivy
+  :diminish
+  :demand t
+  :config (ivy-mode)
+  )
+
+(use-package swiper
+  :commands (swiper)
+  :config
+  (setq swiper-goto-start-of-match t))
+
+(use-package counsel
+  :commands (counsel-git-grep counsel-switch-buffer)
+  :config
+  (keymap-global-set "M-x" #'counsel-M-x)
+  (keymap-global-set "C-s" #'swiper-isearch)
+  (keymap-global-set "C-x C-f" #'counsel-find-file)
+  )
+
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1))
 
 ;; --- Customizations ---
 ;;
