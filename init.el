@@ -214,6 +214,8 @@ apps are not started from a shell."
      "hu" 'counsel-unicode-char
      "b" 'ivy-switch-buffer
      "B" 'buffer-menu
+     "ff" 'counsel-fzf
+     "f/" 'counsel-rg
      )
     (evil-ex-define-cmd "gx" 'counsel-M-x)
     (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
@@ -260,7 +262,9 @@ apps are not started from a shell."
   :config
   (keymap-global-set "M-x" #'counsel-M-x)
   (keymap-global-set "C-s" #'swiper-isearch)
-  (keymap-global-set "C-x C-f" #'counsel-find-file)
+  (keymap-global-set "C-x C-f" #'counsel-fzf)
+  (setq counsel-fzf-cmd
+	"rg --files --hidden -g '!.git' | fzf -f \"%s\"")
   )
 
 (use-package ivy-rich
