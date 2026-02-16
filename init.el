@@ -241,28 +241,32 @@ apps are not started from a shell."
 
 (use-package diminish)
 
+;; C-c o
 (use-package command-log-mode
   :diminish
   :config
   (global-command-log-mode))
 
+;; Ivy, a generic completion mechanism for Emacs.
 (use-package ivy
   :diminish
   :demand t
   :config (ivy-mode)
   )
 
+;; Swiper, an Ivy-enhanced alternative to Isearch.
 (use-package swiper
   :commands (swiper)
   :config
   (setq swiper-goto-start-of-match t))
 
+;; Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
 (use-package counsel
   :commands (counsel-git-grep counsel-switch-buffer)
   :config
   (keymap-global-set "M-x" #'counsel-M-x)
   (keymap-global-set "C-s" #'swiper-isearch)
-  (keymap-global-set "C-x C-f" #'counsel-fzf)
+  (keymap-global-set "C-x C-f" #'counsel-find-file)
   (setq counsel-fzf-cmd
 	"rg --files --hidden -g '!.git' | fzf -f \"%s\"")
   )
