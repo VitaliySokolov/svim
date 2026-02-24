@@ -27,11 +27,11 @@ apps are not started from a shell."
 ;; No sound bell
 (setq visible-bell t)
 
+(menu-bar-mode -1)
 ;; window only
-(when (display-graphic-p)
+(when window-system
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
-  (menu-bar-mode -1)
   (tooltip-mode -1))
 
 ;; terminal only
@@ -274,6 +274,7 @@ apps are not started from a shell."
 (use-package ivy-rich
   :init
   (ivy-rich-mode 1))
+
 
 ;; --- Customizations ---
 ;;
