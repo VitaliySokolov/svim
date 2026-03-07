@@ -46,6 +46,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
-vim.opt.foldmethod = 'expr' -- markdown folds
-vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldmethod = 'indent'
+-- vim.opt.foldmethod = 'expr' -- markdown folds
+-- vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldlevelstart = 99  -- start with all folds open
