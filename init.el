@@ -275,6 +275,7 @@ apps are not started from a shell."
   :init
   (ivy-rich-mode 1))
 
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 
 ;; --- Customizations ---
 ;;
