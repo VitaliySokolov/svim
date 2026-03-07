@@ -44,7 +44,11 @@ apps are not started from a shell."
 (setq display-line-numbers-type 'relative)
 (global-hl-line-mode +1)
 
-(load-theme 'deeper-blue)
+(load-theme
+ ;; 'deeper-blue
+ ;; 'leuven-dark
+ 'modus-vivendi
+ )
 
 (setq auto-save-default nil) ;; #file.txt#
 ;; (make-directory "~/.emacs.d/auto-saves/" t)
