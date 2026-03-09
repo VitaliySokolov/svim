@@ -1,6 +1,5 @@
 ;; +++ Initial configuration +++
 ;;
-
 (setq inhibit-startup-message t)
 
 (defun set-exec-path-from-zsh-PATH ()
@@ -41,7 +40,7 @@ apps are not started from a shell."
 
 (column-number-mode)
 (global-display-line-numbers-mode t)
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type 'visual)
 (global-hl-line-mode +1)
 
 (load-theme
@@ -123,6 +122,7 @@ apps are not started from a shell."
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
+  (setq evil-respect-visual-line-mode t)
   :config
   (evil-mode 1)
   ;; (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
@@ -225,6 +225,12 @@ apps are not started from a shell."
     (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
     (evil-ex-define-cmd "bm" 'buffer-menu)
     (evil-ex-define-cmd "bs" 'ivy-switch-buffer)
+
+    (general-define-key
+     :states 'motion
+     :keymaps 'org-agenda-mode-map
+     "go" 'org-agenda-open-link
+     )
     ;; always
     ;; (define-key key-translation-map (kbd "SPC") 'event-apply-control-modifier)
     )
@@ -290,6 +296,7 @@ apps are not started from a shell."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages nil))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
