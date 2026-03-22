@@ -41,6 +41,7 @@ apps are not started from a shell."
 (column-number-mode)
 (global-display-line-numbers-mode t)
 (setq display-line-numbers-type 'visual)
+(setopt display-line-numbers-width-start t)
 (global-hl-line-mode +1)
 
 (load-theme
