@@ -130,8 +130,8 @@ apps are not started from a shell."
   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
   ;; Use visual line motions even outside of visual-line-mode buffers
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+  ;; (evil-global-set-key 'motion "j" 'evil-next-visual-line) ;; -> "gj"
+  ;; (evil-global-set-key 'motion "k" 'evil-previous-visual-line) ;; -> "gk"
 
   (evil-set-initial-state 'messages-buffer-mode 'normal)
   (evil-set-initial-state 'dashboard-mode 'normal)
@@ -287,6 +287,11 @@ apps are not started from a shell."
   (ivy-rich-mode 1))
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
+
+(use-package markdown-mode
+  :init
+  ;; (setq markdown-hide-urls t)
+  )
 
 ;; --- Customizations ---
 ;;
