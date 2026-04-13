@@ -293,6 +293,11 @@ apps are not started from a shell."
   ;; (setq markdown-hide-urls t)
   )
 
+;; https://github.com/laishulu/emacs-tmux-pane
+(use-package tmux-pane
+  :config
+  (tmux-pane-mode))
+
 ;; --- Customizations ---
 ;;
 
