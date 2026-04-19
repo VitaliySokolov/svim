@@ -69,8 +69,8 @@ keymap("n", "<C-s>", "<cmd> w <CR>") --"Save file" },
 keymap("n", "<C-c>", "<cmd> %y+ <CR>") --"Copy whole file" },
 
 -- line numbers
-keymap("n", "<leader>n", "<cmd> set nu! <CR>") --"Toggle line number" },
-keymap("n", "<leader>rn", "<cmd> set rnu! <CR>") --"Toggle relative number" },
+keymap("n", "<leader>ln", "<cmd> set nu! <CR>", { desc = "Toggle line number" })
+keymap("n", "<leader>lr", "<cmd> set rnu! <CR>", { desc = "Toggle relative number" })
 
 -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
 -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
@@ -147,7 +147,7 @@ keymap('n', '<leader>gf', "<cmd>Telescope git_files <CR>", { desc = 'Telescope g
 keymap('n', '<leader>gb', "<cmd>Telescope git_branches <CR>", { desc = 'Telescope git branches' })
 keymap('n', '<leader>gc', "<cmd>Telescope git_commits <CR>", { desc = 'Telescope git commits' })
 keymap('n', '<leader>gz', "<cmd>Telescope git_stash <CR>", { desc = 'Telescope git stash' })
-keymap('n', '<leader>b', "<cmd>Telescope buffers <CR>", { desc = 'Telescope buffers' })
+keymap('n', '<leader>bb', "<cmd>Telescope buffers <CR>", { desc = 'Telescope buffers' })
 keymap('n', '<C-x>b', "<cmd>Telescope buffers <CR>", { desc = 'Switch to buffers' })
 keymap('n', '<leader>f/', "<cmd>Telescope live_grep <CR>", { desc = 'Telescope live grep' })
 keymap('n', '<leader>/', "<cmd>Telescope current_buffer_fuzzy_find <CR>", { desc = 'Telescope byffer fzf' })
@@ -172,11 +172,20 @@ keymap('n', '<leader>fC',
   { desc = 'Find Config File' })
 
 -- diagnostics
-keymap('n', '<leader>d', vim.diagnostic.open_float)
+keymap('n', '<leader>dd', vim.diagnostic.open_float)
 
 -- test
-keymap('n', '<leader>t', "<cmd>TestNearest<CR>")
+keymap('n', '<leader>tt', "<cmd>TestNearest<CR>")
 -- keymap('n', '<leader>T', "<cmd>TestFile<CR>")
 -- keymap('n', '<leader>a', "<cmd>TestSuite<CR>")
 -- keymap('n', '<leader>l', "<cmd>TestLast<CR>")
 -- keymap('n', '<leader>g', "<cmd>TestVisit<CR>")
+
+-- obsidian
+keymap('n', '<leader>od.', "<cmd>ObsidianToday<CR>", {desc="Open today's note"})
+keymap('n', '<leader>ody', "<cmd>ObsidianToday -1<CR>", {desc="Open yesterday's note"})
+keymap('n', '<leader>odt', "<cmd>ObsidianToday +1<CR>", {desc="Open tomorrow's note"})
+keymap('n', '<leader>odd', "<cmd>ObsidianDailies<CR>", {desc="Week dailies"})
+keymap('n', '<leader>odwy', "<cmd>ObsidianYesterday<CR>", {desc="Open/create prevoius working day"})
+keymap('n', '<leader>odwt', "<cmd>ObsidianTomorrow<CR>", {desc="Open/create next working day"})
+keymap('n', '<leader>o/', "<cmd>ObsidianSearch<CR>", {desc="Search"})

@@ -5,20 +5,6 @@ return {
         dependencies = { 'nvim-lua/plenary.nvim' }
     },
     {
-    "folke/which-key.nvim",
-      event = "VeryLazy",
-      opts = {},
-      keys = {
-        {
-          "<leader>?",
-          function()
-            require("which-key").show({ global = false })
-          end,
-          desc = "Buffer Local Keymaps",
-        },
-      },
-    },
-    {
       "alexghergh/nvim-tmux-navigation",
       event = "VeryLazy", -- Load the plugin when Neovim starts
       config = function()
@@ -74,5 +60,12 @@ return {
         },
       },
       lazy = false, -- neo-tree will lazily load itself
+    },
+    {
+      'stevearc/oil.nvim',
+      event = "VeryLazy", -- Load the plugin when Neovim starts
+      opts = {},
+      -- Optional dependencies
+      -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you want icons
     }
 }
