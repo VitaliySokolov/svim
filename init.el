@@ -221,6 +221,8 @@ apps are not started from a shell."
      "B" 'buffer-menu
      "ff" 'counsel-fzf
      "f/" 'counsel-rg
+     "o/" 'obsidian-jump
+     "od." 'obsidian-daily-note
      )
     (evil-ex-define-cmd "gx" 'counsel-M-x)
     (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
@@ -297,6 +299,18 @@ apps are not started from a shell."
 (use-package tmux-pane
   :config
   (tmux-pane-mode))
+
+(use-package obsidian
+  :config
+  (setq obsidian-links-use-vault-path t) ;; it does not help
+  (global-obsidian-mode t)
+  (obsidian-update)
+  ;; (obsidian-backlinks-mode t)
+  :custom
+  (obsidian-directory (getenv "OBSIDIAN_VAULT_PATH"))
+  (obsidian-daily-notes-directory "notes/dailies")
+  (markdown-enable-wiki-links t)
+  )
 
 ;; --- Customizations ---
 ;;
