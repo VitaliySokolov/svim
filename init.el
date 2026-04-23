@@ -58,6 +58,8 @@ apps are not started from a shell."
 (setq make-backup-files nil) ;; file.txt~
 ;; (setq backup-directory-alist `(("." . "~/.saves")))
 
+(savehist-mode 1)
+
 
 ;; +++ Packaging +++
 ;;
@@ -191,6 +193,18 @@ apps are not started from a shell."
   ;; u c o -> C-u C-c C-o
   ;; 1 2 f -> M-12 C-f
   )
+
+(defun vitaliy/counsel-rg-selection (start end)
+  "Run counsel rg with selected text"
+  (interactive "r")
+  (let ((region (buffer-substring-no-properties start end)))
+    (counsel-rg region)))
+
+(defun vitaliy/counsel-rg-word ()
+  "Run counsel rg with word at pointer as initial value"
+  (interactive)
+  (counsel-rg (thing-at-point 'word t)))
+
 (use-package general
     :after evil god-mode
     :config
@@ -205,7 +219,7 @@ apps are not started from a shell."
     ;; (general-nmap "SPC SPC" 'god-execute-with-current-bindings) ; => SPC-SPC
 
     (my-leader-def
-     :keymaps 'normal
+     :keymaps '(normal visual)
      "oa" 'org-agenda
      "oc" 'org-capture
      "wo" 'other-window
@@ -220,10 +234,17 @@ apps are not started from a shell."
      "b" 'ivy-switch-buffer
      "B" 'buffer-menu
      "ff" 'counsel-fzf
-     "f/" 'counsel-rg
+     "f/" 'vitaliy/counsel-rg-word
+     "fo" 'dired-jump
      "o/" 'obsidian-jump
      "od." 'obsidian-daily-note
      )
+
+    (my-leader-def
+     :keymaps 'visual
+     "f/" 'vitaliy/counsel-rg-selection
+     )
+
     (evil-ex-define-cmd "gx" 'counsel-M-x)
     (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
     (evil-ex-define-cmd "bm" 'buffer-menu)

@@ -170,16 +170,39 @@ keymap('n', '<leader>fC',
     })
   end,
   { desc = 'Find Config File' })
+keymap('n', '<leader>fo', "<cmd>Oil<CR>", { desc = 'Oil' })
+
+function vim.getVisualSelection()
+  local current_clipboard_content = vim.fn.getreg('"')
+
+  vim.cmd('noau normal! "vy"')
+  local text = vim.fn.getreg('v')
+  vim.fn.setreg('v', {})
+
+  vim.fn.setreg('"', current_clipboard_content)
+
+  text = string.gsub(text, "\n", "")
+  if #text > 0 then
+    return text
+  else
+    return ''
+  end
+end
+
+keymap('v', '<leader>f/', function()
+  local text = vim.getVisualSelection()
+  require("telescope.builtin").live_grep({ default_text = text })
+end, { desc = 'Telescope live grep (Visual)' })
 
 -- diagnostics
 keymap('n', '<leader>dd', vim.diagnostic.open_float)
 
 -- test
 keymap('n', '<leader>tt', "<cmd>TestNearest<CR>")
--- keymap('n', '<leader>T', "<cmd>TestFile<CR>")
--- keymap('n', '<leader>a', "<cmd>TestSuite<CR>")
--- keymap('n', '<leader>l', "<cmd>TestLast<CR>")
--- keymap('n', '<leader>g', "<cmd>TestVisit<CR>")
+-- keymap('n', '<leader>tT', "<cmd>TestFile<CR>")
+-- keymap('n', '<leader>ta', "<cmd>TestSuite<CR>")
+-- keymap('n', '<leader>tl', "<cmd>TestLast<CR>")
+-- keymap('n', '<leader>tg', "<cmd>TestVisit<CR>")
 
 -- obsidian
 keymap('n', '<leader>od.', "<cmd>ObsidianToday<CR>", {desc="Open today's note"})

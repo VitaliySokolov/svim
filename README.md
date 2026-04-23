@@ -32,6 +32,9 @@ Select "Send text at start"
 tmux attach -t init || tmux new -s init
 ```
 
+Ubuntu terminal -> Preference -> Command -> Custom Command
+gnome-terminal -- "~/bin/init.sh"
+
 # macos
 
 ```sh
