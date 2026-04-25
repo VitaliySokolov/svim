@@ -6,6 +6,8 @@ return {
           spec = {
             {"<leader>f", group = "File"},
             {"<leader>g", group = "Git"},
+            {"<leader>gh", group = "Hunk"},
+            {"<leader>ght", group = "Toogle"},
             {"<leader>o", group = "Org"},
             {"<leader>od", group = "Dailies"},
             {"<leader>odw", group = "Working Dailies"},

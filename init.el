@@ -238,6 +238,7 @@ apps are not started from a shell."
      "oc" 'org-capture
      "o/" 'obsidian-jump
      "od." 'obsidian-daily-note
+     "oo" 'obsidian-hydra/body
 
      "w" '(:ignore t :wk "window")
      "wo" 'other-window
@@ -291,13 +292,15 @@ apps are not started from a shell."
     (general-define-key
      :states '(normal visual)
      :prefix "["
-     "g" 'diff-hl-previous-hunk
+     "c" 'diff-hl-previous-hunk
+     "C" 'diff-hl-show-hunk-previous
      )
 
     (general-define-key
      :states '(normal visual)
      :prefix "]"
-     "g" 'diff-hl-next-hunk
+     "c" 'diff-hl-next-hunk
+     "C" 'diff-hl-show-hunk-next
      )
 
     ;; always
@@ -383,7 +386,7 @@ apps are not started from a shell."
   )
 
 (use-package diff-hl
-  :config
+  :init
   (global-diff-hl-mode)
   :hook ((diff-hl-mode . diff-hl-flydiff-mode)
 	 (diff-hl-mode . diff-hl-margin-mode)
