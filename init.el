@@ -78,6 +78,15 @@ apps are not started from a shell."
 
 
 (require 'use-package)
+;; https://www.gnu.org/software/emacs/manual/html_mono/use-package.html
+;; (use-package foo  ;; This declaration is equivalent to using require
+;;   :init
+;;   (setq foo-variable t) ;; before foo loaded
+;;   :config
+;;   (foo-mode 1) ;; after foo loaded
+;;   :defer t
+;;   )
+
 (setq use-package-always-ensure t)
 (setq use-package-verbose t)
 (setq use-package-compute-statistics t)
@@ -109,11 +118,13 @@ apps are not started from a shell."
 
 (use-package evil-collection
   :after evil
+  :diminish evil-collection-unimpaired-mode
   :config
   (evil-collection-init))
 
 (use-package evil-commentary
   :after evil
+  :diminish
   :config
   (evil-commentary-mode))
 
@@ -154,6 +165,7 @@ apps are not started from a shell."
   (evil-org-agenda-set-keys))
 
 (use-package undo-tree
+  :diminish
   :config
   (global-undo-tree-mode)
   (setq undo-tree-visualizer-diff t)
@@ -220,24 +232,44 @@ apps are not started from a shell."
 
     (my-leader-def
      :keymaps '(normal visual)
+
+     "o" '(:ignore t :wk "org")
      "oa" 'org-agenda
      "oc" 'org-capture
+     "o/" 'obsidian-jump
+     "od." 'obsidian-daily-note
+
+     "w" '(:ignore t :wk "window")
      "wo" 'other-window
      "w1" 'delete-other-windows
-     "SPC" 'god-execute-with-current-bindings
+     "SPC" '(god-execute-with-current-bindings :wk "god")
+
+     "h" '(:ignore t :wk "help")
+     "hh" 'help
      "hf" 'counsel-describe-function
      "hv" 'counsel-describe-variable
      "ho" 'counsel-describe-symbol
      "hl" 'counsel-find-library
      "hi" 'counsel-info-lookup-symbol
      "hu" 'counsel-unicode-char
-     "b" 'ivy-switch-buffer
-     "B" 'buffer-menu
+
+     "b" '(:ignore t :wk "buffer")
+     "bb" 'ivy-switch-buffer
+     "bB" 'buffer-menu
+
+     "f" '(:ignore t :wk "file")
      "ff" 'counsel-fzf
      "f/" 'vitaliy/counsel-rg-word
      "fo" 'dired-jump
-     "o/" 'obsidian-jump
-     "od." 'obsidian-daily-note
+
+     "g" '(:ignore t :which-key "git")
+     "g'" 'diff-hl-flydiff-mode
+     "gd" 'vc-diff
+
+     "u" '(:ignore t :which-key "undo")
+     "uu" 'undo
+     "ur" 'redo
+     "ul" 'undo-tree-visualize
      )
 
     (my-leader-def
@@ -255,6 +287,19 @@ apps are not started from a shell."
      :keymaps 'org-agenda-mode-map
      "go" 'org-agenda-open-link
      )
+
+    (general-define-key
+     :states '(normal visual)
+     :prefix "["
+     "g" 'diff-hl-previous-hunk
+     )
+
+    (general-define-key
+     :states '(normal visual)
+     :prefix "]"
+     "g" 'diff-hl-next-hunk
+     )
+
     ;; always
     ;; (define-key key-translation-map (kbd "SPC") 'event-apply-control-modifier)
     )
@@ -309,7 +354,11 @@ apps are not started from a shell."
   :init
   (ivy-rich-mode 1))
 
-(add-hook 'prog-mode-hook #'hs-minor-mode)
+(use-package hideshow
+  :diminish hs-minor-mode
+  :hook (prog-mode . hs-minor-mode))
+
+(use-package eldoc :diminish)
 
 (use-package markdown-mode
   :init
@@ -331,6 +380,14 @@ apps are not started from a shell."
   (obsidian-directory (getenv "OBSIDIAN_VAULT_PATH"))
   (obsidian-daily-notes-directory "notes/dailies")
   (markdown-enable-wiki-links t)
+  )
+
+(use-package diff-hl
+  :config
+  (global-diff-hl-mode)
+  :hook ((diff-hl-mode . diff-hl-flydiff-mode)
+	 (diff-hl-mode . diff-hl-margin-mode)
+	 (dired-mode . diff-hl-dired-mode))
   )
 
 ;; --- Customizations ---
