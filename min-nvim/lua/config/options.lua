@@ -50,3 +50,11 @@ vim.opt.foldmethod = 'indent'
 -- vim.opt.foldmethod = 'expr' -- markdown folds
 -- vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldlevelstart = 99  -- start with all folds open
+
+-- Spelling:
+-- ]s [s - navigation
+-- z= - misspelled
+-- zg - marked as good, zug - to remove a word you accidentally added with
+-- zw - marked as wrong
+vim.opt.spell = true
+vim.opt.spelllang = { 'en_gb' }
