@@ -369,7 +369,13 @@ apps are not started from a shell."
   )
 
 ;; https://github.com/laishulu/emacs-tmux-pane
+;; package is outdated with outdated dependencies: names, s
+;; mkdir <emack dir>/lisp
+;; cp tmux-pane.el <emack dir>/lisp # modified
+;; package-remove tmux-pane && pacakge-autoremove
 (use-package tmux-pane
+  :load-path "lisp/"
+  :ensure nil
   :config
   (tmux-pane-mode))
 
