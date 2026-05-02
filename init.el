@@ -164,6 +164,30 @@ apps are not started from a shell."
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
+(use-package org-tempo
+  :ensure nil
+  :after org
+  :config
+  (dolist
+      (template
+       '(
+	 ("el" . "src emacs-lisp")
+	 ("sh" . "src shell")
+	 ("py" . "src python")
+	 ("js" . "src js")
+	 ))
+    (add-to-list
+     'org-structure-template-alist
+     template))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (js . t)
+     (shell . t)
+     (python . t)))
+  ;; (setq org-confirm-babel-evaluate nil) ;; auto confirm
+  )
+
 (use-package undo-tree
   :diminish
   :config
