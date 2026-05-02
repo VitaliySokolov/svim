@@ -31,7 +31,14 @@ apps are not started from a shell."
 (when window-system
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
-  (tooltip-mode -1))
+  (tooltip-mode -1)
+
+  (when (eq system-type 'darwin)
+    (setq mac-option-key-is-meta nil
+	  mac-command-key-is-meta nil
+	  mac-command-modifier 'meta
+	  mac-option-modifier 'none))
+  )
 
 ;; terminal only
 (unless (display-graphic-p)
@@ -357,8 +364,10 @@ apps are not started from a shell."
 (use-package ivy
   :diminish
   :demand t
-  :config (ivy-mode)
+  :config (ivy-mode 1)
   )
+
+(use-package amx) ;; command history list in counsel-m-x
 
 ;; Swiper, an Ivy-enhanced alternative to Isearch.
 (use-package swiper
@@ -368,6 +377,7 @@ apps are not started from a shell."
 
 ;; Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
 (use-package counsel
+  :diminish
   :commands (counsel-git-grep counsel-switch-buffer)
   :config
   (keymap-global-set "M-x" #'counsel-M-x)
