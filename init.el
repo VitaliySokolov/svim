@@ -252,97 +252,110 @@ apps are not started from a shell."
   (interactive)
   (counsel-rg (thing-at-point 'word t)))
 
+(defun vitaliy/open-config-dir ()
+  (interactive)
+  ;; (counsel-fzf nil user-emacs-directory)
+  (dired-jump t user-emacs-directory)
+  )
+
+(defun vitaliy/open-org-dir ()
+  (interactive)
+  (dired-jump t local-org-path)
+  )
+
 (use-package general
-    :after evil god-mode
-    :config
-    (general-evil-setup)
-    (general-create-definer my-leader-def
-      ;; :keymaps 'override
-      :prefix "SPC"
-      ;; :global-prefix "C-c SPC"
-      )
-    ;; (general-nmap "SPC" (general-key "C-c"))
-    ;; (general-nmap "C-c SPC" (general-key "C-x")) ; => SPC-SPC
-    ;; (general-nmap "SPC SPC" 'god-execute-with-current-bindings) ; => SPC-SPC
-
-    (my-leader-def
-     :keymaps '(normal visual)
-
-     "o" '(:ignore t :wk "org")
-     "oa" 'org-agenda
-     "oc" 'org-capture
-     "o/" 'obsidian-jump
-     "od." 'obsidian-daily-note
-     "oo" 'obsidian-hydra/body
-
-     "w" '(:ignore t :wk "window")
-     "wo" 'other-window
-     "w1" 'delete-other-windows
-     "SPC" '(god-execute-with-current-bindings :wk "god")
-
-     "h" '(:ignore t :wk "help")
-     "hh" 'help
-     "hf" 'counsel-describe-function
-     "hv" 'counsel-describe-variable
-     "ho" 'counsel-describe-symbol
-     "hl" 'counsel-find-library
-     "hi" 'counsel-info-lookup-symbol
-     "hu" 'counsel-unicode-char
-
-     "b" '(:ignore t :wk "buffer")
-     "bb" 'ivy-switch-buffer
-     "bB" 'buffer-menu
-
-     "f" '(:ignore t :wk "file")
-     "ff" 'counsel-fzf
-     "f/" 'vitaliy/counsel-rg-word
-     "fo" 'dired-jump
-
-     "g" '(:ignore t :which-key "git")
-     "g'" 'diff-hl-flydiff-mode
-     "gd" 'vc-diff
-
-     "u" '(:ignore t :which-key "undo")
-     "uu" 'undo
-     "ur" 'redo
-     "ul" 'undo-tree-visualize
-
-     ":" 'counsel-M-x
-     )
-
-    (my-leader-def
-     :keymaps 'visual
-     "f/" 'vitaliy/counsel-rg-selection
-     )
-
-    (evil-ex-define-cmd "gx" 'counsel-M-x)
-    (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
-    (evil-ex-define-cmd "bm" 'buffer-menu)
-    (evil-ex-define-cmd "bs" 'ivy-switch-buffer)
-
-    (general-define-key
-     :states 'motion
-     :keymaps 'org-agenda-mode-map
-     "go" 'org-agenda-open-link
-     )
-
-    (general-define-key
-     :states '(normal visual)
-     :prefix "["
-     "c" 'diff-hl-previous-hunk
-     "C" 'diff-hl-show-hunk-previous
-     )
-
-    (general-define-key
-     :states '(normal visual)
-     :prefix "]"
-     "c" 'diff-hl-next-hunk
-     "C" 'diff-hl-show-hunk-next
-     )
-
-    ;; always
-    ;; (define-key key-translation-map (kbd "SPC") 'event-apply-control-modifier)
+  :after evil god-mode
+  :config
+  (general-evil-setup)
+  (general-create-definer my-leader-def
+    ;; :keymaps 'override
+    :prefix "SPC"
+    ;; :global-prefix "C-c SPC"
     )
+  ;; (general-nmap "SPC" (general-key "C-c"))
+  ;; (general-nmap "C-c SPC" (general-key "C-x")) ; => SPC-SPC
+  ;; (general-nmap "SPC SPC" 'god-execute-with-current-bindings) ; => SPC-SPC
+
+  (my-leader-def
+    :keymaps '(normal visual)
+
+    "o" '(:ignore t :wk "org")
+    "oa" 'org-agenda
+    "oc" 'org-capture
+    "o/" 'obsidian-jump
+    "od." 'obsidian-daily-note
+    "oo" 'obsidian-hydra/body
+
+    "w" '(:ignore t :wk "window")
+    "wo" 'other-window
+    "w1" 'delete-other-windows
+    "SPC" '(god-execute-with-current-bindings :wk "god")
+
+    "h" '(:ignore t :wk "help")
+    "hh" 'help
+    "hf" 'counsel-describe-function
+    "hv" 'counsel-describe-variable
+    "ho" 'counsel-describe-symbol
+    "hl" 'counsel-find-library
+    "hi" 'counsel-info-lookup-symbol
+    "hu" 'counsel-unicode-char
+
+    "b" '(:ignore t :wk "buffer")
+    "bb" 'ivy-switch-buffer
+    "bB" 'buffer-menu
+
+    "f" '(:ignore t :wk "file")
+    "ff" 'counsel-fzf
+    "f/" 'vitaliy/counsel-rg-word
+    "fo" 'dired-jump
+    "fC" 'vitaliy/open-config-dir
+    "fO" 'vitaliy/open-org-dir
+
+    "g" '(:ignore t :which-key "git")
+    "g'" 'diff-hl-flydiff-mode
+    "gd" 'vc-diff
+
+    "u" '(:ignore t :which-key "undo")
+    "uu" 'undo
+    "ur" 'redo
+    "ul" 'undo-tree-visualize
+
+    ":" 'counsel-M-x
+    )
+
+  (my-leader-def
+    :keymaps 'visual
+    "f/" 'vitaliy/counsel-rg-selection
+    )
+
+  (evil-ex-define-cmd "gx" 'counsel-M-x)
+  (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
+  (evil-ex-define-cmd "bm" 'buffer-menu)
+  (evil-ex-define-cmd "bs" 'ivy-switch-buffer)
+
+  (general-define-key
+   :states 'motion
+   :keymaps 'org-agenda-mode-map
+   "go" 'org-agenda-open-link
+   )
+
+  (general-define-key
+   :states '(normal visual)
+   :prefix "["
+   "c" 'diff-hl-previous-hunk
+   "C" 'diff-hl-show-hunk-previous
+   )
+
+  (general-define-key
+   :states '(normal visual)
+   :prefix "]"
+   "c" 'diff-hl-next-hunk
+   "C" 'diff-hl-show-hunk-next
+   )
+
+  ;; always
+  ;; (define-key key-translation-map (kbd "SPC") 'event-apply-control-modifier)
+  )
 
 ;; org-mode
 (use-package org
