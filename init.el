@@ -35,9 +35,9 @@ apps are not started from a shell."
 
   (when (eq system-type 'darwin)
     (setq mac-option-key-is-meta nil
-	  mac-command-key-is-meta nil
-	  mac-command-modifier 'meta
-	  mac-option-modifier 'none))
+          mac-command-key-is-meta nil
+          mac-command-modifier 'meta
+          mac-option-modifier 'none))
   )
 
 ;; terminal only
@@ -50,6 +50,8 @@ apps are not started from a shell."
 (setq display-line-numbers-type 'visual)
 (setopt display-line-numbers-width-start t)
 (global-hl-line-mode +1)
+
+(add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 (load-theme
  ;; 'deeper-blue
@@ -74,8 +76,8 @@ apps are not started from a shell."
 (require 'package)
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
-	("org" . "https://orgmode.org/elpa/")
-	("gnu" . "https://elpa.gnu.org/packages/")))
+        ("org" . "https://orgmode.org/elpa/")
+        ("gnu" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
@@ -157,11 +159,13 @@ apps are not started from a shell."
   (evil-set-initial-state 'dashboard-mode 'normal)
   ;; (define-key evil-insert-state-map "jk" 'evil-normal-state)
   (add-hook 'evil-insert-state-entry-hook
-	    (lambda () (or (display-graphic-p)
-			   (send-string-to-terminal "\033[5 q"))))
+            (lambda ()
+              (or (display-graphic-p)
+                  (send-string-to-terminal "\033[5 q"))))
   (add-hook 'evil-insert-state-exit-hook
-	    (lambda () (or (display-graphic-p)
-			   (send-string-to-terminal "\033[2 q"))))
+            (lambda ()
+              (or (display-graphic-p)
+                  (send-string-to-terminal "\033[2 q"))))
   )
 
 (use-package evil-org
@@ -178,11 +182,11 @@ apps are not started from a shell."
   (dolist
       (template
        '(
-	 ("el" . "src emacs-lisp")
-	 ("sh" . "src shell")
-	 ("py" . "src python")
-	 ("js" . "src js")
-	 ))
+         ("el" . "src emacs-lisp")
+         ("sh" . "src shell")
+         ("py" . "src python")
+         ("js" . "src js")
+         ))
     (add-to-list
      'org-structure-template-alist
      template))
@@ -302,6 +306,8 @@ apps are not started from a shell."
      "uu" 'undo
      "ur" 'redo
      "ul" 'undo-tree-visualize
+
+     ":" 'counsel-M-x
      )
 
     (my-leader-def
@@ -339,18 +345,17 @@ apps are not started from a shell."
     )
 
 ;; org-mode
-(setq local-org-path (getenv "ORG_AGENDA_PATH"))
-(when (stringp local-org-path)
-  (setq org-agenda-files (list local-org-path)))
+(use-package org
+  :ensure nil
+  :init
+  (setq local-org-path (getenv "ORG_AGENDA_PATH"))
+  (when (stringp local-org-path)
+    (setq org-agenda-files (list local-org-path)))
 
-(setq org-agenda-start-with-log-mode t)
-(setq org-log-done 'time)
-(setq org-log-into-drawer nil) ;; State, notes, clock in LOGBOOK
-(setq org-todo-keywords
-      '((sequence "BACKLOG(b!)" "TODO(t!)" "IN PROGRESS(i!)" "REVIEW(r!)"
-                  "|" "DONE(d!)" "CANCELED(c@/!)")
-        (sequence "PROPOSAL" "WATCHING" "READING" "|" "SEEN")
-      ))
+  (setq org-agenda-start-with-log-mode t)
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer nil) ;; State, notes, clock in LOGBOOK
+  )
 
 (use-package diminish)
 
@@ -384,7 +389,7 @@ apps are not started from a shell."
   (keymap-global-set "C-s" #'swiper-isearch)
   (keymap-global-set "C-x C-f" #'counsel-find-file)
   (setq counsel-fzf-cmd
-	"rg --files --hidden -g '!.git' | fzf -f \"%s\"")
+        "rg --files --hidden -g '!.git' | fzf -f \"%s\"")
   )
 
 (use-package ivy-rich
@@ -423,14 +428,28 @@ apps are not started from a shell."
   (obsidian-directory (getenv "OBSIDIAN_VAULT_PATH"))
   (obsidian-daily-notes-directory "notes/dailies")
   (markdown-enable-wiki-links t)
+  :bind
+  (
+   :map
+   obsidian-mode-map
+   ;; Create note
+   ("C-c C-n" . obsidian-capture)
+   ;; If you prefer you can use `obsidian-insert-wikilink'
+   ("C-c C-l" . obsidian-insert-wikilink)
+   ;; Open file pointed to by link at point
+   ("C-c C-o" . obsidian-follow-link-at-point)
+   ;; Open a different note from vault
+   ("C-c C-p" . obsidian-jump)
+   ;; Follow a backlink for the current file
+   ("C-c C-b" . obsidian-backlink-jump))
   )
 
 (use-package diff-hl
   :init
   (global-diff-hl-mode)
   :hook ((diff-hl-mode . diff-hl-flydiff-mode)
-	 (diff-hl-mode . diff-hl-margin-mode)
-	 (dired-mode . diff-hl-dired-mode))
+         (diff-hl-mode . diff-hl-margin-mode)
+         (dired-mode . diff-hl-dired-mode))
   )
 
 ;; --- Customizations ---
@@ -449,3 +468,9 @@ apps are not started from a shell."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; personal
+(use-package local-config
+  :load-path "lisp/"
+  :if (locate-library "local-config")
+  :ensure nil)
