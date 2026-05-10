@@ -2,6 +2,18 @@
 ;;
 (setq inhibit-startup-message t)
 
+(add-hook
+ 'emacs-startup-hook
+ (lambda ()
+   (run-with-idle-timer
+    1             ;; second
+    nil           ;; do not repeat
+    (lambda ()
+      (message
+       "Emacs loaded in %s with %d garbage collections."
+       (emacs-init-time)
+       gcs-done)))))
+
 (defun set-exec-path-from-zsh-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
 that used by the user's shell.
@@ -464,6 +476,25 @@ apps are not started from a shell."
          (diff-hl-mode . diff-hl-margin-mode)
          (dired-mode . diff-hl-dired-mode))
   )
+
+(use-package company
+  :after (prog-mode text-mode)
+  :hook ((prog-mode text-mode) . company-mode)
+  :bind
+  (:map
+   company-active-map
+   ("<tab>" . company-complete-selection)
+   ("TAB" . company-complete-selection)
+   ("<return>" . nil)
+   ("RET" . nil)
+   )
+  ;; :config
+  ;; (define-key company-active-map (kbd "RET") nil)
+  ;; (define-key company-active-map (kbd "TAB") #'company-complete-selection)
+  :custom
+  (company-minimum-prefix-length 3)
+  (company-idle-delay 0.0))
+
 
 ;; --- Customizations ---
 ;;
