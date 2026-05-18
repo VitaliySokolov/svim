@@ -379,7 +379,8 @@ apps are not started from a shell."
 
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
-  (setq org-log-into-drawer nil) ;; State, notes, clock in LOGBOOK
+  (setq org-log-into-drawer t) ;; State, notes, clock in LOGBOOK
+  (setq org-startup-folded 'content)
   )
 
 (use-package diminish)
@@ -495,6 +496,10 @@ apps are not started from a shell."
   (company-minimum-prefix-length 3)
   (company-idle-delay 0.0))
 
+(use-package project
+  :ensure nil
+  :config
+  (setq project-mode-line t))
 
 ;; --- Customizations ---
 ;;
