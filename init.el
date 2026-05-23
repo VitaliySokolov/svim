@@ -158,6 +158,8 @@ apps are not started from a shell."
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
   (setq evil-respect-visual-line-mode t)
+  (setq evil-kill-on-visual-paste nil) ;; keymap("v", "p", '"_dP')
+
   :config
   (evil-mode 1)
   ;; (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
@@ -275,6 +277,18 @@ apps are not started from a shell."
   (dired-jump t local-org-path)
   )
 
+(defun vitaliy/evil-shift-left-visual ()
+  (interactive)
+  (evil-shift-left (region-beginning) (region-end))
+  (evil-normal-state)
+  (evil-visual-restore))
+
+(defun vitaliy/evil-shift-right-visual ()
+  (interactive)
+  (evil-shift-right (region-beginning) (region-end))
+  (evil-normal-state)
+  (evil-visual-restore))
+
 (use-package general
   :after evil god-mode
   :config
@@ -365,6 +379,11 @@ apps are not started from a shell."
    "C" 'diff-hl-show-hunk-next
    )
 
+  (general-define-key
+   :states '(visual)
+   ">" 'vitaliy/evil-shift-right-visual ;; keymap("v", "<", "<gv")
+   "<" 'vitaliy/evil-shift-left-visual  ;; keymap("v", ">", ">gv")
+   )
   ;; always
   ;; (define-key key-translation-map (kbd "SPC") 'event-apply-control-modifier)
   )
