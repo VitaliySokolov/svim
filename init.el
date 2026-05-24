@@ -347,6 +347,16 @@ apps are not started from a shell."
     "ul" 'undo-tree-visualize
 
     ":" 'counsel-M-x
+
+    "p" '(:ignore t :wk "project")
+    "pp" 'project-switch-project
+    "pb" 'project-switch-to-buffer
+    "p!" 'project-shell-command
+    "p&" 'project-async-shell-command
+    "po" 'project-dired
+    "pe" 'project-eshell
+    "pg" 'project-vc-dir
+    "pf" 'project-find-file
     )
 
   (my-leader-def
@@ -384,6 +394,10 @@ apps are not started from a shell."
    ">" 'vitaliy/evil-shift-right-visual ;; keymap("v", "<", "<gv")
    "<" 'vitaliy/evil-shift-left-visual  ;; keymap("v", ">", ">gv")
    )
+
+  (general-define-key
+   "C-;" 'god-execute-with-current-bindings) ;; alt god-mode
+
   ;; always
   ;; (define-key key-translation-map (kbd "SPC") 'event-apply-control-modifier)
   )
