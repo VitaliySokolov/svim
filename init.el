@@ -163,7 +163,7 @@ apps are not started from a shell."
   :config
   (evil-mode 1)
   ;; (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+  ;; (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
   ;; Use visual line motions even outside of visual-line-mode buffers
   ;; (evil-global-set-key 'motion "j" 'evil-next-visual-line) ;; -> "gj"
@@ -498,6 +498,7 @@ apps are not started from a shell."
   )
 
 (use-package company
+  :diminish
   :after (prog-mode text-mode)
   :hook ((prog-mode text-mode) . company-mode)
   :bind
@@ -513,12 +514,28 @@ apps are not started from a shell."
   ;; (define-key company-active-map (kbd "TAB") #'company-complete-selection)
   :custom
   (company-minimum-prefix-length 3)
-  (company-idle-delay 0.0))
+  (company-idle-delay 0.0)
+  :config
+  (add-to-list
+     'company-backends 'company-yasnippet)
+  )
 
 (use-package project
   :ensure nil
   :config
   (setq project-mode-line t))
+
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :init
+  ;; (setq yas-snippet-dirs (list <other path>))
+  (yas-global-mode 1)
+  )
+(use-package yasnippet-snippets)
+
+(with-eval-after-load 'eglot
+  (setq eglot-autoshutdown t)              ;; Shutdown server when last buffer closes
+  )
 
 ;; --- Customizations ---
 ;;
