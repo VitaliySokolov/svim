@@ -32,6 +32,10 @@ apps are not started from a shell."
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
+(setq-default c-basic-offset 2)
+(setq-default js-indent-level 2)
+(setq-default python-indent-offset 4)
+
 ;; The default is 800 kilobytes.  Measured in bytes.
 (setq gc-cons-threshold (* 10 1000 1000))
 
@@ -96,7 +100,6 @@ apps are not started from a shell."
 
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
-
 
 (require 'use-package)
 ;; https://www.gnu.org/software/emacs/manual/html_mono/use-package.html
@@ -529,9 +532,8 @@ apps are not started from a shell."
   :custom
   (company-minimum-prefix-length 3)
   (company-idle-delay 0.0)
-  :config
-  (add-to-list
-     'company-backends 'company-yasnippet)
+  ;; :config
+  ;; (add-to-list 'company-backends 'company-yasnippet)
   )
 
 (use-package project
