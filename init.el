@@ -14,6 +14,13 @@
        (emacs-init-time)
        gcs-done)))))
 
+(defun get-env-from-shell (env-name)
+  (replace-regexp-in-string
+   "[ \t\n]*$" ""
+   (shell-command-to-string
+    (format "$SHELL --login -c 'source ~/.zshrc && echo $%s'" env-name)
+    )))
+
 (defun set-exec-path-from-zsh-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
 that used by the user's shell.
@@ -21,10 +28,7 @@ that used by the user's shell.
 This is particularly useful under Mac OS X and macOS, where GUI
 apps are not started from a shell."
   (let ((path-from-shell
-         (replace-regexp-in-string
-          "[ \t\n]*$" "" (shell-command-to-string
-                          "$SHELL --login -c 'source ~/.zshrc && echo $PATH'"
-                          ))))
+         (get-env-from-shell "PATH")))
     (setenv "PATH" path-from-shell)
     (setq exec-path (split-string path-from-shell path-separator))))
 
@@ -68,6 +72,7 @@ apps are not started from a shell."
 (global-hl-line-mode +1)
 
 (add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'org-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 (load-theme
  ;; 'deeper-blue
@@ -409,7 +414,7 @@ apps are not started from a shell."
 (use-package org
   :ensure nil
   :init
-  (setq local-org-path (getenv "ORG_AGENDA_PATH"))
+  (setq local-org-path (get-env-from-shell "ORG_AGENDA_PATH"))
   (when (stringp local-org-path)
     (setq org-agenda-files (list local-org-path)))
 
@@ -487,7 +492,7 @@ apps are not started from a shell."
   (obsidian-update)
   ;; (obsidian-backlinks-mode t)
   :custom
-  (obsidian-directory (getenv "OBSIDIAN_VAULT_PATH"))
+  (obsidian-directory (get-env-from-shell "OBSIDIAN_VAULT_PATH"))
   (obsidian-daily-notes-directory "notes/dailies")
   (markdown-enable-wiki-links t)
   :bind
