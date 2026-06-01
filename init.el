@@ -1,5 +1,8 @@
 ;; +++ Initial configuration +++
-;;
+
+
+;;; Init
+
 (setq inhibit-startup-message t)
 
 (add-hook
@@ -73,6 +76,8 @@ apps are not started from a shell."
 
 (add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
 (add-hook 'org-mode-hook (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'prog-mode-hook 'outline-minor-mode)
+(setq outline-minor-mode-cycle t)
 
 (load-theme
  ;; 'deeper-blue
@@ -91,8 +96,7 @@ apps are not started from a shell."
 (savehist-mode 1)
 
 
-;; +++ Packaging +++
-;;
+;;; Packaging
 
 (require 'package)
 (setq package-archives
@@ -145,6 +149,7 @@ apps are not started from a shell."
 ;;
 
 
+;;; Evil
 (use-package evil-collection
   :after evil
   :diminish evil-collection-unimpaired-mode
@@ -197,30 +202,7 @@ apps are not started from a shell."
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
-(use-package org-tempo
-  :ensure nil
-  :after org
-  :config
-  (dolist
-      (template
-       '(
-         ("el" . "src emacs-lisp")
-         ("sh" . "src shell")
-         ("py" . "src python")
-         ("js" . "src js")
-         ))
-    (add-to-list
-     'org-structure-template-alist
-     template))
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (js . t)
-     (shell . t)
-     (python . t)))
-  ;; (setq org-confirm-babel-evaluate nil) ;; auto confirm
-  )
-
+;;; Undo, xclip, god mode
 (use-package undo-tree
   :diminish
   :config
@@ -263,6 +245,7 @@ apps are not started from a shell."
   ;; 1 2 f -> M-12 C-f
   )
 
+;;; Helper funcitons
 (defun vitaliy/counsel-rg-selection (start end)
   "Run counsel rg with selected text"
   (interactive "r")
@@ -297,6 +280,7 @@ apps are not started from a shell."
   (evil-normal-state)
   (evil-visual-restore))
 
+;;; General
 (use-package general
   :after evil god-mode
   :config
@@ -411,6 +395,7 @@ apps are not started from a shell."
   )
 
 ;; org-mode
+;;; Org
 (use-package org
   :ensure nil
   :init
@@ -424,15 +409,31 @@ apps are not started from a shell."
   (setq org-startup-folded 'content)
   )
 
-(use-package diminish)
-
-;; C-c o
-(use-package command-log-mode
-  :diminish
+(use-package org-tempo
+  :ensure nil
+  :after org
   :config
-  (global-command-log-mode))
+  (dolist
+      (template
+       '(
+         ("el" . "src emacs-lisp")
+         ("sh" . "src shell")
+         ("py" . "src python")
+         ("js" . "src js")
+         ))
+    (add-to-list
+     'org-structure-template-alist
+     template))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (js . t)
+     (shell . t)
+     (python . t)))
+  ;; (setq org-confirm-babel-evaluate nil) ;; auto confirm
+  )
 
-;; Ivy, a generic completion mechanism for Emacs.
+;;; Ivy, a generic completion mechanism for Emacs, swiper, counsel
 (use-package ivy
   :diminish
   :demand t
@@ -462,6 +463,19 @@ apps are not started from a shell."
 (use-package ivy-rich
   :init
   (ivy-rich-mode 1))
+
+(use-package hydra)
+(use-package ivy-hydra)
+
+;;; Other
+
+(use-package diminish)
+
+;; C-c o
+(use-package command-log-mode
+  :diminish
+  :config
+  (global-command-log-mode))
 
 (use-package hideshow
   :diminish hs-minor-mode
@@ -558,6 +572,8 @@ apps are not started from a shell."
   (setq eglot-autoshutdown t)              ;; Shutdown server when last buffer closes
   )
 
+;;; Dynamic part
+
 ;; --- Customizations ---
 ;;
 
@@ -575,7 +591,7 @@ apps are not started from a shell."
  ;; If there is more than one, they won't work right.
  )
 
-;; personal
+;;; Personal
 (use-package local-config
   :load-path "lisp/"
   :if (locate-library "local-config")
