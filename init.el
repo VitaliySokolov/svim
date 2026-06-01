@@ -94,6 +94,7 @@ apps are not started from a shell."
 ;; (setq backup-directory-alist `(("." . "~/.saves")))
 
 (savehist-mode 1)
+(recentf-mode 1)
 
 
 ;;; Packaging
@@ -280,6 +281,52 @@ apps are not started from a shell."
   (evil-normal-state)
   (evil-visual-restore))
 
+(defun vitaliy/describe-function ()
+  (interactive)
+  (cond
+   ((not vitaliy/ivy-disabled) (counsel-describe-function))
+   ((call-interactively 'describe-function))
+   )
+  )
+(defun vitaliy/describe-variable ()
+  (interactive)
+  (cond
+   ((not vitaliy/ivy-disabled) (counsel-describe-variable))
+   ((call-interactively 'describe-variable))
+   )
+  )
+(defun vitaliy/describe-symbol ()
+  (interactive)
+  (counsel-describe-symbol)
+  )
+(defun vitaliy/find-library ()
+  (interactive)
+  (counsel-find-library)
+  )
+(defun vitaliy/info-lookup-symbol ()
+  (interactive)
+  (counsel-info-lookup-symbol)
+  )
+(defun vitaliy/unicode-char ()
+  (interactive)
+  (counsel-unicode-char)
+  )
+(defun vitaliy/M-x ()
+  (interactive)
+  (cond
+   ((not vitaliy/ivy-disabled) (counsel-M-x))
+   ((call-interactively 'execute-extended-command))
+   )
+  )
+
+(defun vitaliy/switch-buffer ()
+  (interactive)
+  (cond
+   ((not vitaliy/ivy-disabled) (ivy-switch-buffer))
+   ((not vitaliy/vertico-disabled) (consult-buffer))
+   ((call-interactively 'switch-to-buffer))
+   )
+  )
 ;;; General
 (use-package general
   :after evil god-mode
@@ -311,19 +358,19 @@ apps are not started from a shell."
 
     "h" '(:ignore t :wk "help")
     "hh" 'help
-    "hf" 'counsel-describe-function
-    "hv" 'counsel-describe-variable
-    "ho" 'counsel-describe-symbol
-    "hl" 'counsel-find-library
-    "hi" 'counsel-info-lookup-symbol
-    "hu" 'counsel-unicode-char
+    "hf" '(vitaliy/describe-function :wk "describe function")
+    "hv" 'vitaliy/describe-variable
+    "ho" 'vitaliy/describe-symbol
+    "hl" 'vitaliy/find-library
+    "hi" 'vitaliy/info-lookup-symbol
+    "hu" 'vitaliy/unicode-char
 
     "b" '(:ignore t :wk "buffer")
-    "bb" 'ivy-switch-buffer
+    "bb" 'vitaliy/switch-buffer
     "bB" 'buffer-menu
 
     "f" '(:ignore t :wk "file")
-    "ff" 'counsel-fzf
+    "ff" 'consult-git-grep ; 'counsel-fzf
     "f/" 'vitaliy/counsel-rg-word
     "fo" 'dired-jump
     "fC" 'vitaliy/open-config-dir
@@ -338,11 +385,11 @@ apps are not started from a shell."
     "ur" 'redo
     "ul" 'undo-tree-visualize
 
-    ":" 'counsel-M-x
+    ":" 'vitaliy/M-x
 
     "p" '(:ignore t :wk "project")
     "pp" 'project-switch-project
-    "pb" 'project-switch-to-buffer
+    "pb" 'consult-project-buffer ; 'project-switch-to-buffer
     "p!" 'project-shell-command
     "p&" 'project-async-shell-command
     "po" 'project-dired
@@ -356,10 +403,10 @@ apps are not started from a shell."
     "f/" 'vitaliy/counsel-rg-selection
     )
 
-  (evil-ex-define-cmd "gx" 'counsel-M-x)
+  (evil-ex-define-cmd "gx" 'vitaliy/M-x)
   (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
   (evil-ex-define-cmd "bm" 'buffer-menu)
-  (evil-ex-define-cmd "bs" 'ivy-switch-buffer)
+  (evil-ex-define-cmd "bs" 'vitaliy/switch-buffer)
 
   (general-define-key
    :states 'motion
@@ -407,6 +454,8 @@ apps are not started from a shell."
   (setq org-log-done 'time)
   (setq org-log-into-drawer t) ;; State, notes, clock in LOGBOOK
   (setq org-startup-folded 'content)
+  (setq org-M-RET-may-split-line '((default . nil)))
+  (setq org-insert-heading-respect-content t)
   )
 
 (use-package org-tempo
@@ -434,22 +483,28 @@ apps are not started from a shell."
   )
 
 ;;; Ivy, a generic completion mechanism for Emacs, swiper, counsel
+(setq vitaliy/ivy-disabled t)
 (use-package ivy
+  :if (not vitaliy/ivy-disabled)
   :diminish
   :demand t
   :config (ivy-mode 1)
   )
 
-(use-package amx) ;; command history list in counsel-m-x
+(use-package amx ;; command history list in counsel-m-x
+  :if (not vitaliy/ivy-disabled)
+)
 
 ;; Swiper, an Ivy-enhanced alternative to Isearch.
 (use-package swiper
+  :if (not vitaliy/ivy-disabled)
   :commands (swiper)
   :config
   (setq swiper-goto-start-of-match t))
 
 ;; Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
 (use-package counsel
+  :if (not vitaliy/ivy-disabled)
   :diminish
   :commands (counsel-git-grep counsel-switch-buffer)
   :config
@@ -461,11 +516,112 @@ apps are not started from a shell."
   )
 
 (use-package ivy-rich
+  :if (not vitaliy/ivy-disabled)
   :init
   (ivy-rich-mode 1))
 
-(use-package hydra)
-(use-package ivy-hydra)
+(use-package hydra
+  :if (not vitaliy/ivy-disabled)
+  )
+(use-package ivy-hydra
+  :if (not vitaliy/ivy-disabled)
+  )
+
+;;; Vertico, Consult, Margenalia
+(setq vitaliy/vertico-disabled nil)
+
+(use-package vertico
+  :if (not vitaliy/vertico-disabled)
+  :init
+  (vertico-mode)
+  )
+
+(use-package orderless
+  :if (not vitaliy/vertico-disabled)
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-category-defaults nil) ;; Disable defaults, use our settings
+  (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
+
+(use-package marginalia
+  :if (not vitaliy/vertico-disabled)
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode)
+  )
+
+(use-package consult
+  :if (not vitaliy/vertico-disabled)
+  :init
+
+  ;; Tweak the register preview for `consult-register-load',
+  ;; `consult-register-store' and the built-in commands.  This improves the
+  ;; register formatting, adds thin separator lines, register sorting and hides
+  ;; the window mode line.
+  (advice-add #'register-preview :override #'consult-register-window)
+  (setq register-preview-delay 0.5)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  :bind
+  (;; C-c bindings in `mode-specific-map'
+   ("C-c M-x" . consult-mode-command)
+   ("C-c h" . consult-history)
+   ("C-c k" . consult-kmacro)
+   ("C-c m" . consult-man)
+   ("C-c i" . consult-info)
+   ([remap Info-search] . consult-info)
+   ;; C-x bindings in `ctl-x-map'
+   ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+   ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+   ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+   ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+   ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+   ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+   ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+   ;; Custom M-# bindings for fast register access
+   ("M-#" . consult-register-load)
+   ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+   ("C-M-#" . consult-register)
+   ;; Other custom bindings
+   ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+   ;; M-g bindings in `goto-map'
+   ("M-g e" . consult-compile-error)
+   ("M-g r" . consult-grep-match)
+   ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+   ("M-g g" . consult-goto-line)             ;; orig. goto-line
+   ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+   ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+   ("M-g m" . consult-mark)
+   ("M-g k" . consult-global-mark)
+   ("M-g i" . consult-imenu)
+   ("M-g I" . consult-imenu-multi)
+   ;; M-s bindings in `search-map'
+   ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+   ("M-s c" . consult-locate)
+   ("M-s g" . consult-grep)
+   ("M-s G" . consult-git-grep)
+   ("M-s r" . consult-ripgrep)
+   ("M-s l" . consult-line)
+   ("C-s" . consult-line)
+   ("M-s L" . consult-line-multi)
+   ("M-s k" . consult-keep-lines)
+   ("M-s u" . consult-focus-lines)
+   ;; Isearch integration
+   ("M-s e" . consult-isearch-history)
+   :map isearch-mode-map
+   ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+   ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+   ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+   ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+   ;; Minibuffer history
+   :map minibuffer-local-map
+   ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+   ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+  )
 
 ;;; Other
 
