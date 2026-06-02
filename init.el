@@ -247,16 +247,26 @@ apps are not started from a shell."
   )
 
 ;;; Helper funcitons
-(defun vitaliy/counsel-rg-selection (start end)
+(defun vitaliy/find-rg-selection (start end)
   "Run counsel rg with selected text"
   (interactive "r")
   (let ((region (buffer-substring-no-properties start end)))
-    (counsel-rg region)))
+    (evil-normal-state)
+    (cond
+     ((not vitaliy/ivy-disabled) (counsel-rg region))
+     ((not vitaliy/vertico-disabled) (consult-ripgrep nil region))
+     ((project-find-regexp region)))
+    ))
 
-(defun vitaliy/counsel-rg-word ()
+(defun vitaliy/find-rg-word ()
   "Run counsel rg with word at pointer as initial value"
   (interactive)
-  (counsel-rg (thing-at-point 'word t)))
+  (let ((selected-word (thing-at-point 'word t)))
+    (cond
+     ((not vitaliy/ivy-disabled) (counsel-rg selected-word))
+     ((not vitaliy/vertico-disabled) (consult-ripgrep nil selected-word))
+     ((project-find-regexp selected-word)))
+    ))
 
 (defun vitaliy/open-config-dir ()
   (interactive)
@@ -371,7 +381,7 @@ apps are not started from a shell."
 
     "f" '(:ignore t :wk "file")
     "ff" 'consult-git-grep ; 'counsel-fzf
-    "f/" 'vitaliy/counsel-rg-word
+    "f/" 'vitaliy/find-rg-word
     "fo" 'dired-jump
     "fC" 'vitaliy/open-config-dir
     "fO" 'vitaliy/open-org-dir
@@ -400,7 +410,7 @@ apps are not started from a shell."
 
   (my-leader-def
     :keymaps 'visual
-    "f/" 'vitaliy/counsel-rg-selection
+    "f/" 'vitaliy/find-rg-selection
     )
 
   (evil-ex-define-cmd "gx" 'vitaliy/M-x)
