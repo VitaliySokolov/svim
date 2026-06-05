@@ -77,6 +77,7 @@ apps are not started from a shell."
 (add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
 (add-hook 'org-mode-hook (lambda () (setq indent-tabs-mode nil)))
 (add-hook 'prog-mode-hook 'outline-minor-mode)
+(add-hook 'diff-mode-hook 'outline-minor-mode)
 (setq outline-minor-mode-cycle t)
 
 (load-theme
@@ -415,14 +416,27 @@ apps are not started from a shell."
 
   (evil-ex-define-cmd "gx" 'vitaliy/M-x)
   (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
-  (evil-ex-define-cmd "bm" 'buffer-menu)
-  (evil-ex-define-cmd "bs" 'vitaliy/switch-buffer)
+  (evil-ex-define-cmd "bm" 'buffer-menu) ; the same as :ls !!!
+  (evil-ex-define-cmd "l" 'vitaliy/switch-buffer)
+  (evil-ex-define-cmd "h" 'help)
 
   (general-define-key
    :states 'motion
    :keymaps 'org-agenda-mode-map
    "go" 'org-agenda-open-link
    )
+
+  ;; (general-define-key
+  ;;  :states '(normal visual)
+  ;;  :keymaps 'eglot-mode-map
+  ;;  :prefix "gr"
+  ;;  ;; "gr" '(:ignore t :wk "code actions")
+  ;;  "n" 'eglot-rename) ;; Add F2
+  ;; g r -> xref-find-references (M-?)
+  ;; g d -> evil-goto-definition
+  ;; (evil-goto-definition-imenu evil-goto-definition-semantic
+  ;;                        evil-goto-definition-xref
+  ;;                        evil-goto-definition-search)
 
   (general-define-key
    :states '(normal visual)
@@ -756,6 +770,8 @@ apps are not started from a shell."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(put 'narrow-to-region 'disabled nil)
 
 ;;; Personal
 (use-package local-config
