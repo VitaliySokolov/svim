@@ -156,6 +156,7 @@ apps are not started from a shell."
   :after evil
   :diminish evil-collection-unimpaired-mode
   :config
+  (setq evil-collection-repl-submit-state 'insert)
   (evil-collection-init))
 
 (use-package evil-commentary
