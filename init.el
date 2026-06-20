@@ -1,9 +1,6 @@
 ;; +++ Initial configuration +++
 
-
 ;;; Init
-
-(setq inhibit-startup-message t)
 
 (add-hook
  'emacs-startup-hook
@@ -16,6 +13,54 @@
        "Emacs loaded in %s with %d garbage collections."
        (emacs-init-time)
        gcs-done)))))
+
+(use-package emacs
+  :init
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+    (load custom-file))
+  (setq-default indent-tabs-mode nil)
+  (setq auto-save-default nil) ;; #file.txt#
+  ;; (make-directory "~/.emacs.d/auto-saves/" t)
+  ;; (setq auto-save-file-name-transforms
+  ;;       `((".*" ,(expand-file-name "~/.emacs.d/auto-saves/") t)))
+  (setq make-backup-files nil) ;; file.txt~
+  ;; (setq backup-directory-alist `(("." . "~/.saves")))
+  (setq gc-cons-threshold (* 10 1000 1000))   ; The default is 800 kilobytes.  Measured in bytes.
+
+  :custom
+  (use-short-answers t)        ; >=v28 (fset 'yes-or-no-p 'y-or-n-p)
+  (visible-bell t)             ; No sound bell
+  (column-number-mode t)
+  (global-display-line-numbers-mode t)
+  (display-line-numbers-type 'visual)
+  (display-line-numbers-width-start t)
+  (global-hl-line-mode 1)
+  (menu-bar-mode nil)
+  (tool-bar-mode nil)          ; Disable the graphical tool bar
+  (tooltip-mode nil)
+  (scroll-bar-mode nil)        ; Disable the scroll bar
+  (inhibit-startup-screen t)   ; Skip the welcome screen
+  (use-dialog-box nil)
+  (global-auto-revert-mode 1)  ; Revert buffers when the underlying file has changed
+  (global-auto-revert-non-file-buffers t)
+  (vc-follow-symlinks t)
+
+  :config
+  (when window-system
+    (when (eq system-type 'darwin)
+      (setq mac-option-key-is-meta nil
+            mac-command-key-is-meta nil
+            mac-command-modifier 'meta
+            mac-option-modifier 'none))
+    )
+  (unless (display-graphic-p)
+    (xterm-mouse-mode 1))      ; mouse support in terminal
+
+  (savehist-mode 1)
+  (recentf-mode 1)
+  (load-theme 'modus-vivendi)
+  )
 
 (defun get-env-from-shell (env-name)
   (replace-regexp-in-string
@@ -36,66 +81,6 @@ apps are not started from a shell."
     (setq exec-path (split-string path-from-shell path-separator))))
 
 (set-exec-path-from-zsh-PATH)
-
-(fset 'yes-or-no-p 'y-or-n-p)
-
-(setq-default c-basic-offset 2)
-(setq-default js-indent-level 2)
-(setq-default python-indent-offset 4)
-
-;; The default is 800 kilobytes.  Measured in bytes.
-(setq gc-cons-threshold (* 10 1000 1000))
-
-;; No sound bell
-(setq visible-bell t)
-
-(menu-bar-mode -1)
-;; window only
-(when window-system
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (tooltip-mode -1)
-
-  (when (eq system-type 'darwin)
-    (setq mac-option-key-is-meta nil
-          mac-command-key-is-meta nil
-          mac-command-modifier 'meta
-          mac-option-modifier 'none))
-  )
-
-;; terminal only
-(unless (display-graphic-p)
-  ;; mouse support in terminal
-  (xterm-mouse-mode 1))
-
-(column-number-mode)
-(global-display-line-numbers-mode t)
-(setq display-line-numbers-type 'visual)
-(setopt display-line-numbers-width-start t)
-(global-hl-line-mode +1)
-
-(add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
-(add-hook 'org-mode-hook (lambda () (setq indent-tabs-mode nil)))
-(add-hook 'prog-mode-hook 'outline-minor-mode)
-(add-hook 'diff-mode-hook 'outline-minor-mode)
-(setq outline-minor-mode-cycle t)
-
-(load-theme
- ;; 'deeper-blue
- ;; 'leuven-dark
- 'modus-vivendi
- )
-
-(setq auto-save-default nil) ;; #file.txt#
-;; (make-directory "~/.emacs.d/auto-saves/" t)
-;; (setq auto-save-file-name-transforms
-;;       `((".*" ,(expand-file-name "~/.emacs.d/auto-saves/") t)))
-
-(setq make-backup-files nil) ;; file.txt~
-;; (setq backup-directory-alist `(("." . "~/.saves")))
-
-(savehist-mode 1)
-(recentf-mode 1)
 
 
 ;;; Packaging
@@ -122,7 +107,7 @@ apps are not started from a shell."
 ;;   :defer t
 ;;   )
 
-(setq use-package-always-ensure t)
+;; (setq use-package-always-ensure t)
 (setq use-package-verbose t)
 (setq use-package-compute-statistics t)
 
@@ -135,10 +120,6 @@ apps are not started from a shell."
   (auto-package-update-maybe)
   (auto-package-update-at-time "09:00"))
 
-;; +++ UI +++
-;;
-
-
 (use-package which-key
   :defer 0
   :diminish which-key-mode
@@ -146,10 +127,6 @@ apps are not started from a shell."
   (which-key-mode)
   (which-key-enable-god-mode-support)
   (setq which-key-idle-delay 1))
-
-;; +++ Evil +++
-;;
-
 
 ;;; Evil
 (use-package evil-collection
@@ -255,7 +232,6 @@ apps are not started from a shell."
   (let ((region (buffer-substring-no-properties start end)))
     (evil-normal-state)
     (cond
-     ((not vitaliy/ivy-disabled) (counsel-rg region))
      ((not vitaliy/vertico-disabled) (consult-ripgrep nil region))
      ((project-find-regexp region)))
     ))
@@ -265,7 +241,6 @@ apps are not started from a shell."
   (interactive)
   (let ((selected-word (thing-at-point 'word t)))
     (cond
-     ((not vitaliy/ivy-disabled) (counsel-rg selected-word))
      ((not vitaliy/vertico-disabled) (consult-ripgrep nil selected-word))
      ((project-find-regexp selected-word)))
     ))
@@ -296,14 +271,12 @@ apps are not started from a shell."
 (defun vitaliy/describe-function ()
   (interactive)
   (cond
-   ((not vitaliy/ivy-disabled) (counsel-describe-function))
    ((call-interactively 'describe-function))
    )
   )
 (defun vitaliy/describe-variable ()
   (interactive)
   (cond
-   ((not vitaliy/ivy-disabled) (counsel-describe-variable))
    ((call-interactively 'describe-variable))
    )
   )
@@ -326,7 +299,6 @@ apps are not started from a shell."
 (defun vitaliy/M-x ()
   (interactive)
   (cond
-   ((not vitaliy/ivy-disabled) (counsel-M-x))
    ((call-interactively 'execute-extended-command))
    )
   )
@@ -334,7 +306,6 @@ apps are not started from a shell."
 (defun vitaliy/switch-buffer ()
   (interactive)
   (cond
-   ((not vitaliy/ivy-disabled) (ivy-switch-buffer))
    ((not vitaliy/vertico-disabled) (consult-buffer))
    ((call-interactively 'switch-to-buffer))
    )
@@ -505,51 +476,6 @@ apps are not started from a shell."
      (shell . t)
      (python . t)))
   ;; (setq org-confirm-babel-evaluate nil) ;; auto confirm
-  )
-
-;;; Ivy, a generic completion mechanism for Emacs, swiper, counsel
-(setq vitaliy/ivy-disabled t)
-(use-package ivy
-  :if (not vitaliy/ivy-disabled)
-  :diminish
-  :demand t
-  :config (ivy-mode 1)
-  )
-
-(use-package amx ;; command history list in counsel-m-x
-  :if (not vitaliy/ivy-disabled)
-)
-
-;; Swiper, an Ivy-enhanced alternative to Isearch.
-(use-package swiper
-  :if (not vitaliy/ivy-disabled)
-  :commands (swiper)
-  :config
-  (setq swiper-goto-start-of-match t))
-
-;; Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
-(use-package counsel
-  :if (not vitaliy/ivy-disabled)
-  :diminish
-  :commands (counsel-git-grep counsel-switch-buffer)
-  :config
-  (keymap-global-set "M-x" #'counsel-M-x)
-  (keymap-global-set "C-s" #'swiper-isearch)
-  (keymap-global-set "C-x C-f" #'counsel-find-file)
-  (setq counsel-fzf-cmd
-        "rg --files --hidden -g '!.git' | fzf -f \"%s\"")
-  )
-
-(use-package ivy-rich
-  :if (not vitaliy/ivy-disabled)
-  :init
-  (ivy-rich-mode 1))
-
-(use-package hydra
-  :if (not vitaliy/ivy-disabled)
-  )
-(use-package ivy-hydra
-  :if (not vitaliy/ivy-disabled)
   )
 
 ;;; Vertico, Consult, Margenalia
@@ -749,28 +675,47 @@ apps are not started from a shell."
   )
 (use-package yasnippet-snippets)
 
-(with-eval-after-load 'eglot
-  (setq eglot-autoshutdown t)              ;; Shutdown server when last buffer closes
+;;; Languages
+
+(use-package outline
+  :ensure nil
+  :defer t
+  :hook
+  ((prog-mode diff-mode) . outline-minor-mode)
+  :custom
+  (outline-minor-mode-cycle t))
+
+(use-package eglot
+  :ensure nil
+  :defer t
+  :custom
+  (eglot-autoshutdown t)              ;; Shutdown server when last buffer closes
+  )
+
+(use-package js
+  :ensure nil
+  :defer t
+  :custom
+  (js-indent-level 2)
+  )
+
+(use-package cc-mode
+  :ensure nil
+  :defer t
+  :custom
+  (c-basic-offset 2)
+  )
+
+(use-package python
+  :ensure nil
+  :defer t
+  :custom
+  (python-indent-offset 4)
   )
 
 ;;; Dynamic part
 
 ;; --- Customizations ---
-;;
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages nil))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 (put 'narrow-to-region 'disabled nil)
 
