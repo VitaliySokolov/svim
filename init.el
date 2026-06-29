@@ -134,7 +134,13 @@ apps are not started from a shell."
   :diminish evil-collection-unimpaired-mode
   :config
   (setq evil-collection-repl-submit-state 'insert)
-  (evil-collection-init))
+  (add-hook
+   'org-agenda-mode-hook
+   (lambda ()
+     (evil-set-initial-state 'org-agenda-mode 'motion)
+     ))
+  (evil-collection-init)
+  )
 
 (use-package evil-commentary
   :after evil
