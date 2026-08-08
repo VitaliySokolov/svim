@@ -42,9 +42,9 @@
   (scroll-bar-mode nil)        ; Disable the scroll bar
   (inhibit-startup-screen t)   ; Skip the welcome screen
   (use-dialog-box nil)
-  (global-auto-revert-mode 1)  ; Revert buffers when the underlying file has changed
-  (global-auto-revert-non-file-buffers t)
   (vc-follow-symlinks t)
+
+  (fill-column 80)
 
   :config
   (when window-system
@@ -188,7 +188,7 @@ apps are not started from a shell."
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
-;;; Undo, xclip, god mode
+;;; Undo, xclip, god mode, autorevert
 (use-package undo-tree
   :diminish
   :config
@@ -229,6 +229,19 @@ apps are not started from a shell."
   ;; g f . . -> M-f M-f M-f ;; repeat
   ;; u c o -> C-u C-c C-o
   ;; 1 2 f -> M-12 C-f
+  )
+(use-package autorevert
+  :ensure nil
+  :custom
+  (auto-revert-interval 5)      ; Check files every 5 seconds (default)
+  (auto-revert-verbose nil)     ; Disable annoying messages when files revert
+  ;; (global-auto-revert-non-file-buffers t) ; Optional: revert Dired and other buffers ;; it removes marks on *Buffer List*
+  :config
+  (global-auto-revert-mode +1)
+  :hook (
+         (dired-mode . auto-revert-mode)
+         ;; (vc-dir-mode . auto-revert-mode) - doesn't work
+         )
   )
 
 ;;; Helper funcitons
