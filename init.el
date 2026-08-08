@@ -398,6 +398,10 @@ apps are not started from a shell."
     "pe" 'project-eshell
     "pg" 'project-vc-dir
     "pf" 'project-find-file
+    "pk" 'project-kill-buffers
+
+    "d" '(:ignore t :wk "diagnost")
+    "dd" 'flymake-show-buffer-diagnostics
     )
 
   (my-leader-def
@@ -434,6 +438,7 @@ apps are not started from a shell."
    :prefix "["
    "c" 'diff-hl-previous-hunk
    "C" 'diff-hl-show-hunk-previous
+   "d" 'flymake-goto-prev-error
    )
 
   (general-define-key
@@ -441,6 +446,7 @@ apps are not started from a shell."
    :prefix "]"
    "c" 'diff-hl-next-hunk
    "C" 'diff-hl-show-hunk-next
+   "d" 'flymake-goto-next-error
    )
 
   (general-define-key
@@ -596,6 +602,7 @@ apps are not started from a shell."
 ;;; Other
 
 (use-package diminish)
+(global-unset-key (kbd "C-x C-p")) ;; to allow C-x C-p (mark-page) to fallback to C-x p - project
 
 ;; C-c o
 (use-package command-log-mode
@@ -683,6 +690,8 @@ apps are not started from a shell."
 
 (use-package project
   :ensure nil
+  :custom
+  (project-kill-buffers-display-buffer-list t)
   :config
   (setq project-mode-line t))
 
@@ -695,6 +704,12 @@ apps are not started from a shell."
 (use-package yasnippet-snippets)
 
 ;;; Languages
+
+(setq treesit-language-source-alist
+      '((typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
+;; M-x treesit-install-language-grammar
+;; Type tsx when prompted and press Enter. Repeat the command for typescript if you plan to use standard .ts files.
 
 (use-package outline
   :ensure nil
