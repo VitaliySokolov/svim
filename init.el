@@ -230,14 +230,15 @@ apps are not started from a shell."
   ;; u c o -> C-u C-c C-o
   ;; 1 2 f -> M-12 C-f
   )
+
 (use-package autorevert
   :ensure nil
+  :init
+  (global-auto-revert-mode +1)
   :custom
   (auto-revert-interval 5)      ; Check files every 5 seconds (default)
   (auto-revert-verbose nil)     ; Disable annoying messages when files revert
   ;; (global-auto-revert-non-file-buffers t) ; Optional: revert Dired and other buffers ;; it removes marks on *Buffer List*
-  :config
-  (global-auto-revert-mode +1)
   :hook (
          (dired-mode . auto-revert-mode)
          ;; (vc-dir-mode . auto-revert-mode) - doesn't work
@@ -731,6 +732,13 @@ apps are not started from a shell."
   :defer t
   :custom
   (js-indent-level 2)
+  )
+
+(use-package typescript-ts-mode
+  :ensure nil
+  :defer t
+  :mode (("\\.tsx\\'" . tsx-ts-mode)
+         ("\\.ts\\'"  . typescript-ts-mode))
   )
 
 (use-package cc-mode
