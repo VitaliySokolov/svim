@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+ORG_CAPTURE=''
+if [[ "$1" != "" ]] ; then
+    if [[ "$2" != "" ]] ; then
+        ORG_CAPTURE="(require 'org-capture) (let ((org-capture-initial \\\"$2\\\")) (org-capture nil \\\"$1\\\"))"
+    else
+        ORG_CAPTURE="(org-capture nil \\\"$1\\\")"
+    fi
+else
+  ORG_CAPTURE="(org-capture)"
+fi
+
+ELISP_CMD="(progn (switch-to-buffer \\\"*scratch*\\\") ${ORG_CAPTURE})"
+FRAME_NAME="'((name . \"Org-Capture\"))'"
+target_cmd="emacsclient -t -F $FRAME_NAME --eval \"$ELISP_CMD\""
+
+if [[ -n "$TMUX" ]]; then
+  tmux split-window -v "$target_cmd"
+else
+  eval "$target_cmd"
+fi
