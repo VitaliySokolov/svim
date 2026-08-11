@@ -59,3 +59,16 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
     end
   end,
 })
+
+
+vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
+  callback = function()
+    if vim.bo.modified and vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+      local ok, _ = pcall(vim.cmd, "update")
+      if not ok then
+        -- Handle failed write if necessary
+        print('failed to autosave')
+      end
+    end
+  end,
+})
