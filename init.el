@@ -685,6 +685,10 @@ apps are not started from a shell."
   :custom
   (company-minimum-prefix-length 3)
   (company-idle-delay 0.0)
+  ;; default values cause issue in terminal
+  ;; (company-pseudo-tooltip-unless-just-one-frontend
+  ;;  company-preview-if-just-one-frontend company-echo-metadata-frontend)
+  (company-frontends '(company-preview-frontend company-echo-metadata-frontend))
   ;; :config
   ;; (add-to-list 'company-backends 'company-yasnippet)
   )
