@@ -1,9 +1,6 @@
 ;; +++ Initial configuration +++
 
-
 ;;; Init
-
-(setq inhibit-startup-message t)
 
 (add-hook
  'emacs-startup-hook
@@ -16,6 +13,54 @@
        "Emacs loaded in %s with %d garbage collections."
        (emacs-init-time)
        gcs-done)))))
+
+(use-package emacs
+  :init
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+    (load custom-file))
+  (setq-default indent-tabs-mode nil)
+  (setq auto-save-default nil) ;; #file.txt#
+  ;; (make-directory "~/.emacs.d/auto-saves/" t)
+  ;; (setq auto-save-file-name-transforms
+  ;;       `((".*" ,(expand-file-name "~/.emacs.d/auto-saves/") t)))
+  (setq make-backup-files nil) ;; file.txt~
+  ;; (setq backup-directory-alist `(("." . "~/.saves")))
+  (setq gc-cons-threshold (* 10 1000 1000))   ; The default is 800 kilobytes.  Measured in bytes.
+
+  :custom
+  (use-short-answers t)        ; >=v28 (fset 'yes-or-no-p 'y-or-n-p)
+  (visible-bell t)             ; No sound bell
+  (column-number-mode t)
+  (global-display-line-numbers-mode t)
+  (display-line-numbers-type 'visual)
+  (display-line-numbers-width-start t)
+  (global-hl-line-mode 1)
+  (menu-bar-mode nil)
+  (tool-bar-mode nil)          ; Disable the graphical tool bar
+  (tooltip-mode nil)
+  (scroll-bar-mode nil)        ; Disable the scroll bar
+  (inhibit-startup-screen t)   ; Skip the welcome screen
+  (use-dialog-box nil)
+  (vc-follow-symlinks t)
+
+  (fill-column 80)
+
+  :config
+  (when window-system
+    (when (eq system-type 'darwin)
+      (setq mac-option-key-is-meta nil
+            mac-command-key-is-meta nil
+            mac-command-modifier 'meta
+            mac-option-modifier 'none))
+    )
+  (unless (display-graphic-p)
+    (xterm-mouse-mode 1))      ; mouse support in terminal
+
+  (savehist-mode 1)
+  (recentf-mode 1)
+  (load-theme 'modus-vivendi)
+  )
 
 (defun get-env-from-shell (env-name)
   (replace-regexp-in-string
@@ -36,64 +81,6 @@ apps are not started from a shell."
     (setq exec-path (split-string path-from-shell path-separator))))
 
 (set-exec-path-from-zsh-PATH)
-
-(fset 'yes-or-no-p 'y-or-n-p)
-
-(setq-default c-basic-offset 2)
-(setq-default js-indent-level 2)
-(setq-default python-indent-offset 4)
-
-;; The default is 800 kilobytes.  Measured in bytes.
-(setq gc-cons-threshold (* 10 1000 1000))
-
-;; No sound bell
-(setq visible-bell t)
-
-(menu-bar-mode -1)
-;; window only
-(when window-system
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (tooltip-mode -1)
-
-  (when (eq system-type 'darwin)
-    (setq mac-option-key-is-meta nil
-          mac-command-key-is-meta nil
-          mac-command-modifier 'meta
-          mac-option-modifier 'none))
-  )
-
-;; terminal only
-(unless (display-graphic-p)
-  ;; mouse support in terminal
-  (xterm-mouse-mode 1))
-
-(column-number-mode)
-(global-display-line-numbers-mode t)
-(setq display-line-numbers-type 'visual)
-(setopt display-line-numbers-width-start t)
-(global-hl-line-mode +1)
-
-(add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
-(add-hook 'org-mode-hook (lambda () (setq indent-tabs-mode nil)))
-(add-hook 'prog-mode-hook 'outline-minor-mode)
-(setq outline-minor-mode-cycle t)
-
-(load-theme
- ;; 'deeper-blue
- ;; 'leuven-dark
- 'modus-vivendi
- )
-
-(setq auto-save-default nil) ;; #file.txt#
-;; (make-directory "~/.emacs.d/auto-saves/" t)
-;; (setq auto-save-file-name-transforms
-;;       `((".*" ,(expand-file-name "~/.emacs.d/auto-saves/") t)))
-
-(setq make-backup-files nil) ;; file.txt~
-;; (setq backup-directory-alist `(("." . "~/.saves")))
-
-(savehist-mode 1)
 
 
 ;;; Packaging
@@ -120,7 +107,7 @@ apps are not started from a shell."
 ;;   :defer t
 ;;   )
 
-(setq use-package-always-ensure t)
+;; (setq use-package-always-ensure t)
 (setq use-package-verbose t)
 (setq use-package-compute-statistics t)
 
@@ -133,10 +120,6 @@ apps are not started from a shell."
   (auto-package-update-maybe)
   (auto-package-update-at-time "09:00"))
 
-;; +++ UI +++
-;;
-
-
 (use-package which-key
   :defer 0
   :diminish which-key-mode
@@ -145,16 +128,19 @@ apps are not started from a shell."
   (which-key-enable-god-mode-support)
   (setq which-key-idle-delay 1))
 
-;; +++ Evil +++
-;;
-
-
 ;;; Evil
 (use-package evil-collection
   :after evil
   :diminish evil-collection-unimpaired-mode
   :config
-  (evil-collection-init))
+  (setq evil-collection-repl-submit-state 'insert)
+  (add-hook
+   'org-agenda-mode-hook
+   (lambda ()
+     (evil-set-initial-state 'org-agenda-mode 'motion)
+     ))
+  (evil-collection-init)
+  )
 
 (use-package evil-commentary
   :after evil
@@ -202,7 +188,7 @@ apps are not started from a shell."
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
-;;; Undo, xclip, god mode
+;;; Undo, xclip, god mode, autorevert
 (use-package undo-tree
   :diminish
   :config
@@ -245,17 +231,39 @@ apps are not started from a shell."
   ;; 1 2 f -> M-12 C-f
   )
 
+(use-package autorevert
+  :ensure nil
+  :init
+  (global-auto-revert-mode +1)
+  :custom
+  (auto-revert-interval 5)      ; Check files every 5 seconds (default)
+  (auto-revert-verbose nil)     ; Disable annoying messages when files revert
+  ;; (global-auto-revert-non-file-buffers t) ; Optional: revert Dired and other buffers ;; it removes marks on *Buffer List*
+  :hook (
+         (dired-mode . auto-revert-mode)
+         ;; (vc-dir-mode . auto-revert-mode) - doesn't work
+         )
+  )
+
 ;;; Helper funcitons
-(defun vitaliy/counsel-rg-selection (start end)
+(defun vitaliy/find-rg-selection (start end)
   "Run counsel rg with selected text"
   (interactive "r")
   (let ((region (buffer-substring-no-properties start end)))
-    (counsel-rg region)))
+    (evil-normal-state)
+    (cond
+     ((not vitaliy/vertico-disabled) (consult-ripgrep nil region))
+     ((project-find-regexp region)))
+    ))
 
-(defun vitaliy/counsel-rg-word ()
+(defun vitaliy/find-rg-word ()
   "Run counsel rg with word at pointer as initial value"
   (interactive)
-  (counsel-rg (thing-at-point 'word t)))
+  (let ((selected-word (thing-at-point 'word t)))
+    (cond
+     ((not vitaliy/vertico-disabled) (consult-ripgrep nil selected-word))
+     ((project-find-regexp selected-word)))
+    ))
 
 (defun vitaliy/open-config-dir ()
   (interactive)
@@ -280,6 +288,48 @@ apps are not started from a shell."
   (evil-normal-state)
   (evil-visual-restore))
 
+(defun vitaliy/describe-function ()
+  (interactive)
+  (cond
+   ((call-interactively 'describe-function))
+   )
+  )
+(defun vitaliy/describe-variable ()
+  (interactive)
+  (cond
+   ((call-interactively 'describe-variable))
+   )
+  )
+(defun vitaliy/describe-symbol ()
+  (interactive)
+  (counsel-describe-symbol)
+  )
+(defun vitaliy/find-library ()
+  (interactive)
+  (counsel-find-library)
+  )
+(defun vitaliy/info-lookup-symbol ()
+  (interactive)
+  (counsel-info-lookup-symbol)
+  )
+(defun vitaliy/unicode-char ()
+  (interactive)
+  (counsel-unicode-char)
+  )
+(defun vitaliy/M-x ()
+  (interactive)
+  (cond
+   ((call-interactively 'execute-extended-command))
+   )
+  )
+
+(defun vitaliy/switch-buffer ()
+  (interactive)
+  (cond
+   ((not vitaliy/vertico-disabled) (consult-buffer))
+   ((call-interactively 'switch-to-buffer))
+   )
+  )
 ;;; General
 (use-package general
   :after evil god-mode
@@ -311,20 +361,20 @@ apps are not started from a shell."
 
     "h" '(:ignore t :wk "help")
     "hh" 'help
-    "hf" 'counsel-describe-function
-    "hv" 'counsel-describe-variable
-    "ho" 'counsel-describe-symbol
-    "hl" 'counsel-find-library
-    "hi" 'counsel-info-lookup-symbol
-    "hu" 'counsel-unicode-char
+    "hf" '(vitaliy/describe-function :wk "describe function")
+    "hv" 'vitaliy/describe-variable
+    "ho" 'vitaliy/describe-symbol
+    "hl" 'vitaliy/find-library
+    "hi" 'vitaliy/info-lookup-symbol
+    "hu" 'vitaliy/unicode-char
 
     "b" '(:ignore t :wk "buffer")
-    "bb" 'ivy-switch-buffer
+    "bb" 'vitaliy/switch-buffer
     "bB" 'buffer-menu
 
     "f" '(:ignore t :wk "file")
-    "ff" 'counsel-fzf
-    "f/" 'vitaliy/counsel-rg-word
+    "ff" 'consult-git-grep ; 'counsel-fzf
+    "f/" 'vitaliy/find-rg-word
     "fo" 'dired-jump
     "fC" 'vitaliy/open-config-dir
     "fO" 'vitaliy/open-org-dir
@@ -338,28 +388,33 @@ apps are not started from a shell."
     "ur" 'redo
     "ul" 'undo-tree-visualize
 
-    ":" 'counsel-M-x
+    ":" 'vitaliy/M-x
 
     "p" '(:ignore t :wk "project")
     "pp" 'project-switch-project
-    "pb" 'project-switch-to-buffer
+    "pb" 'consult-project-buffer ; 'project-switch-to-buffer
     "p!" 'project-shell-command
     "p&" 'project-async-shell-command
     "po" 'project-dired
     "pe" 'project-eshell
     "pg" 'project-vc-dir
     "pf" 'project-find-file
+    "pk" 'project-kill-buffers
+
+    "d" '(:ignore t :wk "diagnost")
+    "dd" 'flymake-show-buffer-diagnostics
     )
 
   (my-leader-def
     :keymaps 'visual
-    "f/" 'vitaliy/counsel-rg-selection
+    "f/" 'vitaliy/find-rg-selection
     )
 
-  (evil-ex-define-cmd "gx" 'counsel-M-x)
+  (evil-ex-define-cmd "gx" 'vitaliy/M-x)
   (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
-  (evil-ex-define-cmd "bm" 'buffer-menu)
-  (evil-ex-define-cmd "bs" 'ivy-switch-buffer)
+  (evil-ex-define-cmd "bm" 'buffer-menu) ; the same as :ls !!!
+  (evil-ex-define-cmd "l" 'vitaliy/switch-buffer)
+  (evil-ex-define-cmd "h" 'help)
 
   (general-define-key
    :states 'motion
@@ -367,11 +422,24 @@ apps are not started from a shell."
    "go" 'org-agenda-open-link
    )
 
+  ;; (general-define-key
+  ;;  :states '(normal visual)
+  ;;  :keymaps 'eglot-mode-map
+  ;;  :prefix "gr"
+  ;;  ;; "gr" '(:ignore t :wk "code actions")
+  ;;  "n" 'eglot-rename) ;; Add F2
+  ;; g r -> xref-find-references (M-?)
+  ;; g d -> evil-goto-definition
+  ;; (evil-goto-definition-imenu evil-goto-definition-semantic
+  ;;                        evil-goto-definition-xref
+  ;;                        evil-goto-definition-search)
+
   (general-define-key
    :states '(normal visual)
    :prefix "["
    "c" 'diff-hl-previous-hunk
    "C" 'diff-hl-show-hunk-previous
+   "d" 'flymake-goto-prev-error
    )
 
   (general-define-key
@@ -379,6 +447,7 @@ apps are not started from a shell."
    :prefix "]"
    "c" 'diff-hl-next-hunk
    "C" 'diff-hl-show-hunk-next
+   "d" 'flymake-goto-next-error
    )
 
   (general-define-key
@@ -407,6 +476,8 @@ apps are not started from a shell."
   (setq org-log-done 'time)
   (setq org-log-into-drawer t) ;; State, notes, clock in LOGBOOK
   (setq org-startup-folded 'content)
+  (setq org-M-RET-may-split-line '((default . nil)))
+  (setq org-insert-heading-respect-content t)
   )
 
 (use-package org-tempo
@@ -433,43 +504,106 @@ apps are not started from a shell."
   ;; (setq org-confirm-babel-evaluate nil) ;; auto confirm
   )
 
-;;; Ivy, a generic completion mechanism for Emacs, swiper, counsel
-(use-package ivy
-  :diminish
-  :demand t
-  :config (ivy-mode 1)
-  )
+;;; Vertico, Consult, Margenalia
+(setq vitaliy/vertico-disabled nil)
 
-(use-package amx) ;; command history list in counsel-m-x
-
-;; Swiper, an Ivy-enhanced alternative to Isearch.
-(use-package swiper
-  :commands (swiper)
-  :config
-  (setq swiper-goto-start-of-match t))
-
-;; Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
-(use-package counsel
-  :diminish
-  :commands (counsel-git-grep counsel-switch-buffer)
-  :config
-  (keymap-global-set "M-x" #'counsel-M-x)
-  (keymap-global-set "C-s" #'swiper-isearch)
-  (keymap-global-set "C-x C-f" #'counsel-find-file)
-  (setq counsel-fzf-cmd
-        "rg --files --hidden -g '!.git' | fzf -f \"%s\"")
-  )
-
-(use-package ivy-rich
+(use-package vertico
+  :if (not vitaliy/vertico-disabled)
   :init
-  (ivy-rich-mode 1))
+  (vertico-mode)
+  )
 
-(use-package hydra)
-(use-package ivy-hydra)
+(use-package orderless
+  :if (not vitaliy/vertico-disabled)
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-category-defaults nil) ;; Disable defaults, use our settings
+  (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
+
+(use-package marginalia
+  :if (not vitaliy/vertico-disabled)
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode)
+  )
+
+(use-package consult
+  :if (not vitaliy/vertico-disabled)
+  :init
+
+  ;; Tweak the register preview for `consult-register-load',
+  ;; `consult-register-store' and the built-in commands.  This improves the
+  ;; register formatting, adds thin separator lines, register sorting and hides
+  ;; the window mode line.
+  (advice-add #'register-preview :override #'consult-register-window)
+  (setq register-preview-delay 0.5)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  :bind
+  (;; C-c bindings in `mode-specific-map'
+   ("C-c M-x" . consult-mode-command)
+   ("C-c h" . consult-history)
+   ("C-c k" . consult-kmacro)
+   ("C-c m" . consult-man)
+   ("C-c i" . consult-info)
+   ([remap Info-search] . consult-info)
+   ;; C-x bindings in `ctl-x-map'
+   ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+   ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+   ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+   ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+   ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+   ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+   ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+   ;; Custom M-# bindings for fast register access
+   ("M-#" . consult-register-load)
+   ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+   ("C-M-#" . consult-register)
+   ;; Other custom bindings
+   ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+   ;; M-g bindings in `goto-map'
+   ("M-g e" . consult-compile-error)
+   ("M-g r" . consult-grep-match)
+   ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+   ("M-g g" . consult-goto-line)             ;; orig. goto-line
+   ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+   ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+   ("M-g m" . consult-mark)
+   ("M-g k" . consult-global-mark)
+   ("M-g i" . consult-imenu)
+   ("M-g I" . consult-imenu-multi)
+   ;; M-s bindings in `search-map'
+   ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+   ("M-s c" . consult-locate)
+   ("M-s g" . consult-grep)
+   ("M-s G" . consult-git-grep)
+   ("M-s r" . consult-ripgrep)
+   ("M-s l" . consult-line)
+   ("C-s" . consult-line)
+   ("M-s L" . consult-line-multi)
+   ("M-s k" . consult-keep-lines)
+   ("M-s u" . consult-focus-lines)
+   ;; Isearch integration
+   ("M-s e" . consult-isearch-history)
+   :map isearch-mode-map
+   ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+   ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+   ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+   ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+   ;; Minibuffer history
+   :map minibuffer-local-map
+   ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+   ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+  )
 
 ;;; Other
 
 (use-package diminish)
+(global-unset-key (kbd "C-x C-p")) ;; to allow C-x C-p (mark-page) to fallback to C-x p - project
 
 ;; C-c o
 (use-package command-log-mode
@@ -551,12 +685,18 @@ apps are not started from a shell."
   :custom
   (company-minimum-prefix-length 3)
   (company-idle-delay 0.0)
+  ;; default values cause issue in terminal
+  ;; (company-pseudo-tooltip-unless-just-one-frontend
+  ;;  company-preview-if-just-one-frontend company-echo-metadata-frontend)
+  (company-frontends '(company-preview-frontend company-echo-metadata-frontend))
   ;; :config
   ;; (add-to-list 'company-backends 'company-yasnippet)
   )
 
 (use-package project
   :ensure nil
+  :custom
+  (project-kill-buffers-display-buffer-list t)
   :config
   (setq project-mode-line t))
 
@@ -568,28 +708,62 @@ apps are not started from a shell."
   )
 (use-package yasnippet-snippets)
 
-(with-eval-after-load 'eglot
-  (setq eglot-autoshutdown t)              ;; Shutdown server when last buffer closes
+;;; Languages
+
+(setq treesit-language-source-alist
+      '((typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
+;; M-x treesit-install-language-grammar
+;; Type tsx when prompted and press Enter. Repeat the command for typescript if you plan to use standard .ts files.
+
+(use-package outline
+  :ensure nil
+  :defer t
+  :hook
+  ((prog-mode diff-mode) . outline-minor-mode)
+  :custom
+  (outline-minor-mode-cycle t))
+
+(use-package eglot
+  :ensure nil
+  :defer t
+  :custom
+  (eglot-autoshutdown t)              ;; Shutdown server when last buffer closes
+  )
+
+(use-package js
+  :ensure nil
+  :defer t
+  :custom
+  (js-indent-level 2)
+  )
+
+(use-package typescript-ts-mode
+  :ensure nil
+  :defer t
+  :mode (("\\.tsx\\'" . tsx-ts-mode)
+         ("\\.ts\\'"  . typescript-ts-mode))
+  )
+
+(use-package cc-mode
+  :ensure nil
+  :defer t
+  :custom
+  (c-basic-offset 2)
+  )
+
+(use-package python
+  :ensure nil
+  :defer t
+  :custom
+  (python-indent-offset 4)
   )
 
 ;;; Dynamic part
 
 ;; --- Customizations ---
-;;
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages nil))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(put 'narrow-to-region 'disabled nil)
 
 ;;; Personal
 (use-package local-config

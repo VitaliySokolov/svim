@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+ORG_AGENDA=''
+
+if [ "$1" ] && [ "$1" != "m" ] ; then
+  ORG_AGENDA="(org-agenda nil \\\"$1\\\") (switch-to-buffer \\\"*Org Agenda*\\\")"
+else
+  ORG_AGENDA="(org-agenda)"
+fi
+
+ELISP_CMD="(progn (switch-to-buffer \\\"*scratch*\\\") ${ORG_AGENDA} (delete-other-windows))"
+FRAME_NAME="'((name . \"Org-Agenda\"))'"
+target_cmd="emacsclient -t -F $FRAME_NAME --eval \"$ELISP_CMD\""
+
+if [[ -n "$TMUX" ]]; then
+  tmux split-window -v "$target_cmd"
+else
+  eval "$target_cmd"
+fi

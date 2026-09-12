@@ -21,41 +21,69 @@ if [ "$TMUX_RUNNING" -eq 0 ]; then
   fi
 fi
 
+print_line() {
+  line=${1:-""}
+  color=$2
+  start_color=""
+  end_color=""
+  case "$color" in
+    bold)
+      start_color="\033[1m"
+      end_color="\033[0m"
+      ;;
+    white)
+      start_color="\033[37m"
+      end_color="\033[0m"
+      ;;
+    green)
+      start_color="\033[32m"
+      end_color="\033[0m"
+      ;;
+    blue)
+      start_color="\033[34m"
+      end_color="\033[0m"
+      ;;
+    *)
+      ;;
+  esac
+  printf "${start_color}${line}${end_color}\n"
+}
+
 # display help text with an argument
 if [ "$1" = "-h" ] || [ "$1" == "--help" ]; then
-  printf "\n"
-  printf "\033[1m  t - the smart tmux session manager\033[0m\n"
-  printf "\033[37m  https://github.com/joshmedeski/t-smart-tmux-session-manager\n"
-  printf "\n"
-  printf "\033[32m  Run interactive mode\n"
-  printf "\033[34m      t\n"
-  printf "\033[34m        ctrl-s list only tmux sessions\n"
-  printf "\033[34m        ctrl-p list only projects\n"
-  printf "\033[34m        ctrl-f list results from the find command\n"
-  printf "\n"
-  printf "\033[32m  Go to session (matches tmux session, project, or directory)\n"
-  printf "\033[34m      t {name}\n"
-  printf "\n"
-  printf "\033[32m  Open popup (while in tmux)\n"
+  print_line
+  print_line "  t - the smart tmux session manager" bold
+  print_line
+  print_line "  Run interactive mode" green
+  print_line "      t" blue
+  print_line "        ctrl-s list only tmux sessions" blue
+  print_line "        ctrl-p list only projects" blue
+  print_line "        ctrl-f list results from the find command" blue
+  print_line
+  print_line "  Go to session (matches tmux session, project, or directory)" green
+  print_line "      t {name}" blue
+  print_line
+  print_line "  Open popup (while in tmux)" green
 
   if [ "$TMUX_RUNNING" -eq 0 ]; then
     T_BIND=$(tmux show-option -gvq "@t-bind")
     if [ "$T_BIND" = "" ]; then
       T_BIND="T"
     fi
-    printf "\033[34m      <prefix>+%s\n" "$T_BIND"
-    printf "\033[34m        ctrl-s list only tmux sessions\n"
-    printf "\033[34m        ctrl-p list only projects\n"
-    printf "\033[34m        ctrl-f list results from the find command\n"
+    print_line "      <prefix>+${T_BIND}" blue
+    print_line "        ctrl-s list only tmux sessions" blue
+    print_line "        ctrl-p list only projects"  blue
+    print_line "        ctrl-f list results from the find command" blue
   else
-    printf "\033[34m      start tmux server to see bindings\n" "$T_BIND"
+    # printf "\033[34m      start tmux server to see bindings\n" "$T_BIND"
+    print_line "      start tmux server to see bindings" blue
   fi
 
-  printf "\n"
-  printf "\033[32m  Show help\n"
-  printf "\033[34m      t -h\n"
-  printf "\033[34m      t --help\n"
-  printf "\n"
+  print_line
+  print_line "  Show help" green
+  print_line "      t -h" blue
+  print_line "      t --help" blue
+  print_line
   exit 0
 fi
 
@@ -74,6 +102,7 @@ get_fzf_prompt() {
   fi
   [ -n "$fzf_prompt" ] && echo "$fzf_prompt" || echo "$fzf_default_prompt"
 }
+
 PROMPT=$(get_fzf_prompt)
 
 get_fzf_find_binding() {
@@ -198,7 +227,7 @@ if [ $HOME_SED_SAFE -eq 0 ]; then
   RESULT=$(echo "$RESULT" | sed -e "s|^~/|$HOME/|") # get real home path back
 fi
 
-if [[ $RESULT != /* ]]; then # not folder path from zoxide result
+if [[ $RESULT != /* ]]; then # tmux session
   SESSION_NAME=$RESULT
 elif [[ $T_SESSION_USE_GIT_ROOT == 'true' ]]; then
   GIT_ROOT=$(git -C $RESULT rev-parse --show-toplevel 2>/dev/null) && echo $GIT_ROOT >/dev/null
@@ -214,11 +243,13 @@ elif [[ $T_SESSION_USE_GIT_ROOT == 'true' ]]; then
 elif [[ $T_SESSION_NAME_INCLUDE_PARENT == 'true' ]]; then
   SESSION_NAME=$(echo "$RESULT" | tr ' .:' '_' | awk -F "/" '{print $(NF-1)"/"$NF}')
 else
-  SESSION_NAME=$(basename "$RESULT" | tr ' .:' '_')
+  SESSION_NAME="[$(basename $(dirname "$RESULT") | tr ' .:' '_')]$(basename "$RESULT" | tr ' .:' '_')"
 fi
 
 if [ "$T_RUNTYPE" != "serverless" ]; then
-  SESSION=$(tmux list-sessions -F '#S' | grep "^$SESSION_NAME$") # find existing session
+  ESCAPED_SESSION_NAME="${SESSION_NAME//\[/\\\[}"
+  ESCAPED_SESSION_NAME="${ESCAPED_SESSION_NAME//\]/\\\]}"
+  SESSION=$(tmux list-sessions -F '#S' | grep "^$ESCAPED_SESSION_NAME$") # find existing session
 fi
 
 if [ "$SESSION" = "" ]; then # session is missing
