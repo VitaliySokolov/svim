@@ -247,8 +247,8 @@ else
 fi
 
 if [ "$T_RUNTYPE" != "serverless" ]; then
-  ESCAPED_SESSION_NAME="${SESSION_NAME//\[/\\\[}"
-  ESCAPED_SESSION_NAME="${ESCAPED_SESSION_NAME//\]/\\\]}"
+  ESCAPED_SESSION_NAME="${SESSION_NAME//\[/\\[}"
+  ESCAPED_SESSION_NAME="${ESCAPED_SESSION_NAME//\]/\\]}"
   SESSION=$(tmux list-sessions -F '#S' | grep "^$ESCAPED_SESSION_NAME$") # find existing session
 fi
 
