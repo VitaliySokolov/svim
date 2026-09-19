@@ -154,7 +154,7 @@ apps are not started from a shell."
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-u-scroll nil)
   (setq evil-want-C-i-jump nil)
   (setq evil-respect-visual-line-mode t)
   (setq evil-kill-on-visual-paste nil) ;; keymap("v", "p", '"_dP')
@@ -330,6 +330,11 @@ apps are not started from a shell."
    ((call-interactively 'switch-to-buffer))
    )
   )
+
+(defun vitaliy/buffers ()
+  (interactive)
+    (ibuffer t))
+
 ;;; General
 (use-package general
   :after evil god-mode
@@ -370,7 +375,7 @@ apps are not started from a shell."
 
     "b" '(:ignore t :wk "buffer")
     "bb" 'vitaliy/switch-buffer
-    "bB" 'buffer-menu
+    "bB" 'vitaliy/buffers
 
     "f" '(:ignore t :wk "file")
     "ff" 'consult-git-grep ; 'counsel-fzf
@@ -412,8 +417,9 @@ apps are not started from a shell."
 
   (evil-ex-define-cmd "gx" 'vitaliy/M-x)
   (evil-ex-define-cmd "god" 'god-execute-with-current-bindings)
-  (evil-ex-define-cmd "bm" 'buffer-menu) ; the same as :ls !!!
+  (evil-ex-define-cmd "bm" 'vitaliy/buffers)
   (evil-ex-define-cmd "l" 'vitaliy/switch-buffer)
+  (evil-ex-define-cmd "ls" 'vitaliy/buffers) ;; override buffer-menu
   (evil-ex-define-cmd "h" 'help)
 
   (general-define-key
@@ -457,7 +463,8 @@ apps are not started from a shell."
    )
 
   (general-define-key
-   "C-;" 'god-execute-with-current-bindings) ;; alt god-mode
+   "C-;" 'god-execute-with-current-bindings
+   "C-x C-b" 'vitaliy/buffers) ;; alt god-mode
 
   ;; always
   ;; (define-key key-translation-map (kbd "SPC") 'event-apply-control-modifier)
@@ -519,7 +526,8 @@ apps are not started from a shell."
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles partial-completion))))
   (completion-category-defaults nil) ;; Disable defaults, use our settings
-  (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
+  (completion-pcm-leading-wildcard t) ;; Emacs 31: partial-completion behaves like substring
+  )
 
 (use-package marginalia
   :if (not vitaliy/vertico-disabled)
