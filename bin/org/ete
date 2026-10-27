@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+COMMAND=''
+if [[ "$1" != "" ]] ; then
+  COMMAND="$1"
+else
+  COMMAND='version'
+fi
+
+EXE_COMMAND="(execute-extended-command nil \\\"${COMMAND}\\\")"
+
+CMD="(progn (switch-to-buffer \\\"*scratch*\\\") ${EXE_COMMAND} (delete-frame))"
+FRAME_NAME="'((name . \"Run-Cmd\"))'"
+target_cmd="emacsclient -t -F $FRAME_NAME --eval \"$CMD\""
+
+if [[ -n "$TMUX" ]]; then
+  tmux split-window -v "$target_cmd"
+else
+  eval "$target_cmd"
+fi
