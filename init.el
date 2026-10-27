@@ -1,4 +1,4 @@
-;; +++ Initial configuration +++
+;;; +++ Initial configuration +++
 
 ;;; Init
 
@@ -267,8 +267,9 @@ apps are not started from a shell."
 
 (defun vitaliy/open-config-dir ()
   (interactive)
-  ;; (counsel-fzf nil user-emacs-directory)
-  (dired-jump t user-emacs-directory)
+  (let ((default-directory user-emacs-directory))
+    (call-interactively 'find-file user-emacs-directory))
+  ;; (dired-jump t user-emacs-directory)
   )
 
 (defun vitaliy/open-org-dir ()
@@ -354,6 +355,8 @@ apps are not started from a shell."
 
     "o" '(:ignore t :wk "org")
     "oa" 'org-agenda
+    "ov" '(:ignore t :wk "babel")
+    "ove" '(org-babel-execute-maybe :wk "Execute src block (C-c C-v C-e)")
     "oc" 'org-capture
     "o/" 'obsidian-jump
     "od." 'obsidian-daily-note
@@ -498,6 +501,7 @@ apps are not started from a shell."
          ("sh" . "src shell")
          ("py" . "src python")
          ("js" . "src js")
+         ("ai" . "src gptel")
          ))
     (add-to-list
      'org-structure-template-alist
@@ -608,6 +612,17 @@ apps are not started from a shell."
    ("M-r" . consult-history))                ;; orig. previous-matching-history-element
   )
 
+(use-package completion-preview
+  :ensure nil
+  :bind ((:map completion-preview-active-mode-map
+               ("M-n" . completion-preview-next-candidate)
+               ("M-p" . completion-preview-prev-candidate)
+               ;; ("<backtab>" . completion-preview-complete)
+               ("M-i" . completion-preview-insert)
+               ))
+  :init
+  (global-completion-preview-mode +1))
+
 ;;; Other
 
 (use-package diminish)
@@ -676,6 +691,7 @@ apps are not started from a shell."
   )
 
 (use-package company
+  :disabled t
   :diminish
   :after (prog-mode text-mode)
   :hook ((prog-mode text-mode) . company-mode)
@@ -713,7 +729,14 @@ apps are not started from a shell."
   :init
   ;; (setq yas-snippet-dirs (list <other path>))
   (yas-global-mode 1)
+  :bind
+  (:map yas-minor-mode-map
+        ("TAB" . nil)
+        ("<tab>" . nil)
+        ("C-c y" . yas-expand)
+        ("C-c C-y" . yas-describe-tables))
   )
+
 (use-package yasnippet-snippets)
 
 ;;; Languages
